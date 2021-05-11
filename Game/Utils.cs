@@ -17,12 +17,15 @@ namespace Game
             double rotationWidth = Math.Sqrt(btm.Width * btm.Width + btm.Height * btm.Height);
             double height = 0.5 * rotationWidth - 0.5 * rotationWidth * Math.Cos((btm.Height / (2 * Math.PI * rotationWidth)) * ((Math.PI / 180) * 360));
             double width = 0.5 * rotationWidth - 0.5 * rotationWidth * Math.Cos((btm.Width / (2 * Math.PI * rotationWidth)) * ((Math.PI / 180) * 360));
+
+
             Bitmap res = new Bitmap((int)rotationWidth, (int)rotationWidth);
             using (Graphics g = Graphics.FromImage(res))
             {
                 g.TranslateTransform((float)res.Width / 2, (float)res.Height / 2);
                 g.RotateTransform((float)angleData);
                 g.TranslateTransform(-(float)res.Width / 2, -(float)res.Height / 2);
+                
                 g.DrawImage(btm, new Point((int)height, (int)width));
             }
             return res;
@@ -37,19 +40,20 @@ namespace Game
             using (Graphics g = Graphics.FromImage(res))
             {
                 g.FillRectangle(Brushes.Green, 1, 1, health - 2, height - 2);
-                g.FillRectangle(Brushes.Red, 1 + (width - (width - health)), 1, width-(health - 2), height - 2);
+                g.FillRectangle(Brushes.Red, 1 + (width - (width - health)), 1, width-(health - 2)-2, height - 2);
             }
             return res;
         }
 
         public bool[] checkCollision(RectangleF item1, RectangleF item2)
         {
-            
             bool[] collisions = new bool[4];
-            collisions[0] = item1.Right >= item2.Left && item1.Right < item2.Right? true:false;
-            collisions[1] = item1.Left <= item2.Right && item1.Left > item2.Left ? true:false;
-            collisions[2] = item1.Bottom >= item2.Top && item1.Bottom < item2.Bottom ? true:false;
-            collisions[3] = item1.Top <= item2.Bottom && item1.Top > item2.Top ? true:false;
+
+            collisions[0] = item1.Right >= item2.Left && item1.Right <= item2.Left+4; 
+            collisions[1] = item1.Left <= item2.Right && item1.Left >= item2.Right - 4;
+
+            collisions[2] = item1.Bottom >= item2.Top && item1.Bottom <= item2.Top + 4;
+            collisions[3] = item1.Top <= item2.Bottom && item1.Top >= item2.Bottom - 4;
             return collisions;
         }
     }

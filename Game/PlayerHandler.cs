@@ -21,11 +21,13 @@ namespace Game
         private int x;
         private int y;
         private double angle;
+        private Image skinImg;
         
         public PlayerHandler(int xData, int yData)
         {
             health = maxhealth;
             skin = 0;
+            skinImg = Image.FromFile($"{skinsDIR}{skins[skin]}");
             speed = 4;
             x = xData;
             y = yData;
@@ -68,18 +70,23 @@ namespace Game
         public void setSkin(int skinNumbr)
         {
             skin = skinNumbr;
+            skinImg = Image.FromFile($"{skinsDIR}{skins[skin]}");
         }
         public Image getSkin()
         {
-            return Image.FromFile($"{skinsDIR}{skins[skin]}");
+            return skinImg;
+        }
+        public void setHealth(int healthData)
+        {
+            health = healthData;
         }
 
         public Point getCenterPosition()
         {
             Image skin = getSkin();
             return new Point(x - (skin.Width / 2), y - (skin.Width / 2));
-        
-        }public Point getPosition()
+        }
+        public Point getPosition()
         {
             return new Point(x,y);
         }

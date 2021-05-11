@@ -14,20 +14,23 @@ namespace Game
         private int attackDelay = 1000;
         private DateTime lastAttack = DateTime.Now;
         private int skin;
+        private Image skinImg;
         private int speed;
-        private int attackDamage = 10;
+        private int attackDamage;
         private int x;
         private int y;
         private double angle;
         private int health;
         private int maxhealth;
         private Point destenation;
-        public ZombieHandler(int xData,int yData,int speedData,int skinData,int healthData,Point destenationData)
+        public ZombieHandler(int xData,int yData,int speedData,int skinData,int healthData,Point destenationData, int damage=10)
         {
+            attackDamage = damage;
             x = xData;
             y = yData;
             speed = speedData;
             skin = skinData;
+            skinImg = Image.FromFile($"{skinsDIR}{skins[skin]}");
             maxhealth = healthData;
             health = maxhealth;
             destenation = destenationData;
@@ -59,9 +62,14 @@ namespace Game
             return health <= 0;
         }
 
-        public int getHpPercent()
+        public int getHp()
         {
             return health;
+        }
+
+        public int getMaxHp()
+        {
+            return maxhealth;
         }
 
         public double getAngle()
@@ -71,7 +79,13 @@ namespace Game
 
         public Image getSkin()
         {
-            return Image.FromFile($"{skinsDIR}{skins[skin]}");
+            return skinImg;
+        }
+
+        public Point getCenterPosition()
+        {
+            Image skin = getSkin();
+            return new Point(x - (skin.Width / 2), y - (skin.Width / 2));
         }
 
         public Point getLocation()
@@ -87,11 +101,12 @@ namespace Game
             angle += 90;
             if (collisions != null)
             {
+
                 int newX = (int)(x + speed * Math.Cos(angle * (Math.PI / 180.0)));
                 int newY = (int)(y + speed * Math.Sin(angle * (Math.PI / 180.0)));
 
                 if (newX > x && collisions[0] || newX < x && collisions[1]) newX = x;
-                if (newY > x && collisions[2] || newY < x && collisions[3]) newY = y;
+                if (newY > y && collisions[2] || newY < y && collisions[3]) newY = y;
 
                 x = newX;
                 y = newY;
