@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    public class AccountHandler
+    static class AccountHandler
     {
-        string username;
-        public AccountHandler(string usernameData)
+        static string username;
+        static AccountHandler()
         {
-            username = usernameData;
+            
         }
 
-        public string getUsername() {
+        public static string getUsername() {
             return username;
+        }
+
+        public static void setUsername(string userData) {
+            username = userData;
         }
     }
 }

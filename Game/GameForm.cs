@@ -14,11 +14,9 @@ namespace Game
     public partial class GameForm : Form
     {
         GameHandler game;
-        AccountHandler account;
 
-        public GameForm(AccountHandler accountData)
+        public GameForm()
         {
-            account = accountData;
             InitializeComponent();
             Init();
         }
@@ -26,7 +24,7 @@ namespace Game
         private void Init()
         {
             typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, pnlMain, new object[] { true });
-            game = new GameHandler(pnlMain,drawTimer,this, account);
+            game = new GameHandler(pnlMain,drawTimer,this);
             Bitmap cursor = new Bitmap("GUI/crosshair.png");
             this.Cursor = new Cursor(cursor.GetHicon());
             drawTimer.Start();

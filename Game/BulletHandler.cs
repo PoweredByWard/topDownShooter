@@ -10,7 +10,7 @@ namespace Game
     class BulletHandler
     {
         public string skinssDIR = "Bullets/";
-        public string[] bullets = new string[] { "pistol.png", "pistolsilence.png", "smg.png" };
+        public string[] bullets = new string[] { "pistol.png", "turret.png" };
         private string bulletSkin;
         private int speed = 15;
         private double x;
@@ -39,10 +39,10 @@ namespace Game
             return Image.FromFile(bulletSkin);
         }
 
-        public void move()
+        public void move(double deltaTime)
         {
-           x = x+ speed * Math.Cos(angle * (Math.PI / 180.0));
-           y = y+ speed * Math.Sin(angle * (Math.PI / 180.0));
+           x = x+ speed *  deltaTime * Math.Cos(angle * (Math.PI / 180.0));
+           y = y+ speed * deltaTime * Math.Sin(angle * (Math.PI / 180.0));
         }
     }
 }

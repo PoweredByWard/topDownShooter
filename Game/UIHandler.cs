@@ -23,7 +23,7 @@ namespace Game
         {
             game = gameData;
             player = playerData;
-            Ability item = new Ability("item1.png", 300);
+            Ability item = new Ability("item1.png", 3000);
             abilities.Add(item.getAbility());
             abilitiePrices.Add(item.getPrice());
 
@@ -31,7 +31,11 @@ namespace Game
             abilities.Add(item.getAbility());
             abilitiePrices.Add(item.getPrice());
 
-            coins = 0;
+            item = new Ability("item3.png", 400);
+            abilities.Add(item.getAbility());
+            abilitiePrices.Add(item.getPrice());
+
+            coins = 90000;
         }
 
 
@@ -90,7 +94,10 @@ namespace Game
                         }
                         break;
                     case 1:
-                        game.addTurret();
+                        game.addTurret(0);
+                        break;
+                    case 2:
+                        game.addTurret(1);
                         break;
                 }
             }

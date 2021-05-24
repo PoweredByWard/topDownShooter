@@ -15,12 +15,16 @@ namespace Game
         private DateTime lastShot;
         private Point target;
         private double angle;
+        private Image skin;
+        private int type;
 
-        public TurretHandler(Point loc, int delayData)
+        public TurretHandler(Point loc,int typeData)
         {
+            type = typeData;
             x = loc.X;
             y = loc.Y;
-            shootingDelay = delayData;
+            shootingDelay = type == 0? 2000 : 1700;
+            skin = Image.FromFile($"Turrets/turret{type+1}.png");
             lastShot = DateTime.Now;
         }
 
@@ -36,7 +40,12 @@ namespace Game
 
         public Image getSkin()
         {
-            return Image.FromFile($"Turrets/turret1.png");
+            return skin;
+        }
+
+        public int getType()
+        {
+            return type;
         }
 
         public Point getCenterPosition()

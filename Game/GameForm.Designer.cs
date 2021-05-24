@@ -49,7 +49,7 @@
             // 
             // drawTimer
             // 
-            this.drawTimer.Interval = 17;
+            this.drawTimer.Interval = 1;
             this.drawTimer.Tick += new System.EventHandler(this.timerDrawTick);
             // 
             // GameForm

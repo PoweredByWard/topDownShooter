@@ -12,19 +12,13 @@ namespace Game
 {
     public partial class StartForm : Form
     {
-        DataHandler data;
         string username;
         string password;
         public StartForm()
         {
             InitializeComponent();
-            Init();
         }
 
-        private void Init()
-        {
-            data = new DataHandler();
-        }
 
         private void lblToRegister_Click(object sender, EventArgs e)
         {
@@ -77,7 +71,7 @@ namespace Game
                     MessageBox.Show("Your username has to be longer then 3 karaketers.");
                     return false;
                 }
-                else if (data.isTaken(txtRegisterUsername.Text))
+                else if (DataHandler.isTaken(txtRegisterUsername.Text))
                 {
                     MessageBox.Show("This username is already in use.");
                 }
@@ -97,8 +91,8 @@ namespace Game
 
         private void pbLogin_Click(object sender, EventArgs e)
         {
-            AccountHandler account = new AccountHandler("ward");
-            MainScreen mainScreen = new MainScreen(account);
+            AccountHandler.setUsername("ward");
+            MainScreen mainScreen = new MainScreen();
             mainScreen.Show();
             this.Hide();
 
@@ -124,10 +118,11 @@ namespace Game
             bool valid = checkInputs("Register");
             if (valid)
             {
-                if (data.createUser(username, password))
+                if (DataHandler.createUser(username, password))
                 {
-                    AccountHandler account = new AccountHandler(username);
-                    MainScreen mainScreen = new MainScreen(account);
+                    AccountHandler.setUsername(username);
+                    Console.WriteLine(AccountHandler.getUsername());
+                    MainScreen mainScreen = new MainScreen();
                     mainScreen.Show();
                     this.Hide();
                 }

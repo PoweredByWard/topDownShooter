@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 namespace Game
 {
-    class DataHandler
+    static class DataHandler
     {
-        MySqlConnection connection;
-        MySqlDataAdapter daGegevens;
-        DataTable data = new DataTable();
+        static MySqlConnection connection;
+        static MySqlDataAdapter daGegevens;
+        static DataTable data = new DataTable();
 
-        private string connectionString;
-        private bool datastatus;
+        static private string connectionString;
+        static private bool datastatus;
 
-        public DataHandler()
+        static DataHandler()
         {
             connectionString = "Server=83.217.67.11;Port=3306;SslMode=none;Database=06InfoWard;Uid=06InfoWard;Pwd=wardCostNi@6I";
             connection = new MySqlConnection();
@@ -35,7 +35,7 @@ namespace Game
             }
         }
 
-        public bool isTaken(string username)
+        public static bool isTaken(string username)
         {
             Console.WriteLine(datastatus);
             if (datastatus)
@@ -57,7 +57,7 @@ namespace Game
             return true;
         }
 
-        public bool loginUser(string username, string password)
+        public static bool loginUser(string username, string password)
         {
             if (datastatus)
             {
@@ -74,7 +74,7 @@ namespace Game
             }
             return false;
         }
-        public bool createUser(string username, string password)
+        public static bool createUser(string username, string password)
         {
             if (datastatus)
             {
@@ -103,7 +103,7 @@ namespace Game
             return false;
         }
 
-        public string gethash(string password)
+        public static string gethash(string password)
         {
             List<string> targets = new List<string>();
             List<string> replace = new List<string>();
@@ -154,12 +154,12 @@ namespace Game
             }
             char[] chars = hash.ToCharArray();
             Array.Reverse(chars);
-            hash = chars.ToString();
+            hash = string.Join("",chars);
             return getRawHash(hash);
             
         }
 
-        public string getRawHash(string password)
+        public static string getRawHash(string password)
         {
             using (SHA256 shaHash = SHA256.Create())
             {
@@ -175,19 +175,252 @@ namespace Game
             }
         }
 
-        public DataTable getTop(int amount)
+        public static DataTable getTop(int amount)
         {
             data = new DataTable();
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT A.username,M.score,M.zombie_kills,M.wave  FROM Game_Matches M, Game_Accounts A  WHERE M.player = A.user_id ORDER BY M.score LIMIT @amount", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM Game_Matches M, Game_Accounts A  WHERE M.player = A.user_id ORDER BY M.zombie_kills DESC LIMIT @amount", connection);
                 cmd.Parameters.AddWithValue("@amount", amount);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
                 connection.Close();
             }
             return data;
+        }
+
+        public static DataTable getProfile(string username)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT SUM(zombie_kills),SUM(turrets_placed),SUM(wave),SEC_TO_TIME(SUM(TIME_TO_SEC(duration))),SUM(damage_dealt)  FROM Game_Matches  WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username)", connection);
+                cmd.Parameters.AddWithValue("@username", username);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                Console.WriteLine(data.Rows[0][0]);
+            }
+            return data;
+        }
+
+        public static int getCoins()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT coins  FROM Game_Accounts  WHERE username =  @username", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                return int.Parse(data.Rows[0][0].ToString());
+            }
+            return 0;
+        }
+
+        public static void setCoins(int coins)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE Game_Accounts SET coins = @coins WHERE username = @username", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@coins", coins);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public static void saveGame(int wave,int kills,int turretsPlaced,int damgeDealt,TimeSpan duration)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO Game_Matches (player,zombie_kills,turrets_placed,wave,duration,damage_dealt) VALUES ((SELECT user_id FROM Game_Accounts WHERE username = @username),@kills,@turrets,@wave,@duration,@damage)", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@wave", wave);
+                cmd.Parameters.AddWithValue("@kills", kills);
+                cmd.Parameters.AddWithValue("@damage", damgeDealt);
+                cmd.Parameters.AddWithValue("@turrets", turretsPlaced);
+                cmd.Parameters.AddWithValue("@duration", duration);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public static DataTable getItemTypes()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_ItemTypes", connection);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static DataTable getItems(string type)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_Items WHERE type = @type ORDER BY price", connection);
+                cmd.Parameters.AddWithValue("@type", type);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static DataTable getPlayerItems()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_Inventory WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username)", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static string getPlayerSkin()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT It.source FROM Game_Items It, Game_Inventory Inv WHERE Inv.player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 2 AND Inv.item = It.item_id", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count == 0) return "Players/survivor.png";
+                return data.Rows[0][0].ToString();
+            }
+            return "Players/survivor.png";
+
+        }
+
+        public static int getGunPower()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT It.power FROM Game_Items It, Game_Inventory Inv WHERE Inv.player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 1 AND Inv.item = It.item_id", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count == 0) return 0;
+                return int.Parse(data.Rows[0][0].ToString());
+            }
+            return 0;
+        }
+
+        public static string getGunSkin()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT It.source FROM Game_Items It, Game_Inventory Inv WHERE Inv.player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 1 AND Inv.item = It.item_id", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count==0) return "Weapons/pistol.png";
+                return data.Rows[0][0].ToString();
+            }
+            return "Weapons/pistol.png";
+        }
+        public static void equipItem(string itemID)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE Game_Inventory SET equipped = 0 WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND item IN (SELECT item_id FROM Game_Items WHERE type = (SELECT type FROM Game_Items WHERE item_id = @item))", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@item", itemID);
+                cmd.ExecuteNonQuery();
+
+                cmd = new MySqlCommand("UPDATE Game_Inventory SET equipped = 1 WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND item = @item ", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@item", itemID);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+
+        public static bool buyItem(string itemID)
+        {
+            data.Clear();
+            if (datastatus)
+            {
+                int balance = 0;
+                int price = 1;
+
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT coins  FROM Game_Accounts WHERE username = @username", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+
+                if (data.Rows.Count == 0) return false;
+                balance = int.Parse(data.Rows[0][4].ToString());
+
+                data.Clear();
+
+                connection.Open();
+                cmd = new MySqlCommand("SELECT price  FROM Game_Items WHERE item_id = @item", connection);
+                cmd.Parameters.AddWithValue("@item", itemID);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+
+                if (data.Rows.Count == 0) return false;
+                price = int.Parse(data.Rows[0][5].ToString());
+
+                data.Clear();
+
+                if (price > balance) return false;
+                try
+                {
+                    connection.Open();
+                    cmd = new MySqlCommand("UPDATE Game_Accounts SET coins = @balance WHERE username = @username", connection);
+                    cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                    cmd.Parameters.AddWithValue("@balance", balance - price);
+                    cmd.ExecuteNonQuery();
+
+                    cmd = new MySqlCommand("INSERT INTO Game_Inventory (player,item) VALUES ((SELECT user_id FROM Game_Accounts WHERE username = @username),@item)", connection);
+                    cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                    cmd.Parameters.AddWithValue("@item", itemID);
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+
+
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

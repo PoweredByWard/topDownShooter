@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Media;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +39,6 @@ namespace Game
         PopUpHandler popUp;
         WaveHandler waveHndlr;
         UIHandler uiHandler;
-        AccountHandler account;
 
         Graphics g;
         Point mouseLocation;
@@ -53,16 +54,25 @@ namespace Game
         DateTime lastWave;
         DateTime lastFrame;
 
+        double deltaTime;
+        double timedif;
+        const int gameSpeed = 20;
+
         Panel backgroundUI;
         Form gameForm;
 
         Cursor cursor1;
         Cursor cursor2;
 
+        private int kills;
+        private int turretsPlaced;
+        private int damageDealt;
+        private DateTime gameStart;
 
         bool paused;
-        public GameHandler(Panel pnl, Timer drawTimerData,Form gameFormData,AccountHandler accountData)
+        public GameHandler(Panel pnl, Timer drawTimerData,Form gameFormData)
         {
+            Console.WriteLine(Directory.GetCurrentDirectory());
             player = new PlayerHandler(500, 500);
 
             SizeF playerSize = player.getSkin().Size;
@@ -87,7 +97,8 @@ namespace Game
             createMap();
 
             gameForm = gameFormData;
-            account = accountData;
+            deltaTime = 0;
+            timedif = 0;
 
 
             score = 0;
@@ -97,12 +108,17 @@ namespace Game
             cursor1 = new Cursor(cursor1Btm.GetHicon());
             cursor2 = new Cursor(cursor2Btm.GetHicon());
 
+            kills = 0;
+            turretsPlaced = 0;
+            damageDealt = 0;
+            gameStart = DateTime.Now;
         }
 
 
-        public void addTurret()
+        public void addTurret(int type)
         {
-            TurretHandler newTurret = new TurretHandler(player.getPosition(),2000);
+            TurretHandler newTurret = new TurretHandler(player.getPosition(),type);
+            turretsPlaced++;
             turrets.Add(newTurret);
             turretRange.Add(new RectangleF(newTurret.getLocation().X - 300, newTurret.getLocation().Y - 300, 600 + newTurret.getSkin().Width, 600 + newTurret.getSkin().Height));
         }
@@ -151,9 +167,6 @@ namespace Game
                         break;
                     case Keys.Left:
                         moveX--;
-                        break;
-                    case Keys.A:
-                        inventory.setActiveWeapon(1);
                         break;
                     case Keys.Escape:
                         if (lastPaused<DateTime.Now.AddMilliseconds(-400))
@@ -234,12 +247,12 @@ namespace Game
                 }
             }
 
-            if (player.getLastShot() < DateTime.Now.AddMilliseconds(-player.getShootDelay(inventory.getActiveWeaponNumber())))
+            if (player.getLastShot() < DateTime.Now.AddMilliseconds(-player.getShootDelay(inventory.getActiveWeaponPower())))
             {
                 Point playerCenterPosition = player.getPosition();
-                int activeWeapon = inventory.getActiveWeaponNumber();
-                double recoil = rn.Next(-(player.getWeaponRecoil(activeWeapon) / 2), (player.getWeaponRecoil(activeWeapon) / 2));
-                bulletHndlr = new BulletHandler(playerCenterPosition.X, playerCenterPosition.Y, player.getAngle() + recoil, e.Location, activeWeapon);
+                int weaponPower = inventory.getActiveWeaponPower();
+                double recoil = rn.Next(-(player.getWeaponRecoil(weaponPower) / 2), (player.getWeaponRecoil(weaponPower) / 2));
+                bulletHndlr = new BulletHandler(playerCenterPosition.X, playerCenterPosition.Y, player.getAngle() + recoil, e.Location, weaponPower);
                 bullets.Add(bulletHndlr);
 
                 SizeF bulletSize = bulletHndlr.getBullet().Size;
@@ -247,19 +260,26 @@ namespace Game
                 bulletSize.Height = bulletSize.Width > bulletSize.Height ? bulletSize.Width : bulletSize.Height;
 
                 bulletsContainers.Add(new RectangleF(bulletHndlr.getLocation(), bulletSize));
-
+                SoundHandler.playGun();
                 player.setLastShot();
             }
         }
 
         public void move()
         {
-            checkMouse();
-            checkUI();
-            checkBullets();
-            checkPlayer();
-            checkTurrets();
-            checkZombies();
+            timedif = (DateTime.Now - lastFrame).Milliseconds;
+            deltaTime = (double)(DateTime.Now - lastFrame).Milliseconds/ (double)gameSpeed;
+            lastFrame = DateTime.Now;
+            Console.WriteLine(deltaTime);
+            if (deltaTime!=0)
+            {
+                checkMouse();
+                checkUI();
+                checkBullets();
+                checkPlayer();
+                checkTurrets();
+                checkZombies();
+            }
         }
 
         private void checkTurrets()
@@ -281,8 +301,9 @@ namespace Game
                 {
                     Point turretPos = turrets[i].getLocation();
                     double recoil = rn.Next(-17,17);
-                    bulletHndlr = new BulletHandler(turretPos.X, turretPos.Y, turrets[i].getAngle()-90 + recoil, turrets[i].getTarget(), 0);
+                    bulletHndlr = new BulletHandler(turretPos.X, turretPos.Y, turrets[i].getAngle()-90 + recoil, turrets[i].getTarget(), turrets[i].getType());
                     bullets.Add(bulletHndlr);
+                    SoundHandler.playTurret();
 
                     SizeF bulletSize = bulletHndlr.getBullet().Size;
                     bulletSize.Width = bulletSize.Width > bulletSize.Height ? bulletSize.Width : bulletSize.Height;
@@ -379,7 +400,7 @@ namespace Game
                 }
             }
 
-            player.move(playerMove.X, playerMove.Y, mouseLocation, collisions);
+            player.move(playerMove.X, playerMove.Y, mouseLocation, deltaTime, collisions);
 
             playerContainer.Location = player.getPosition();
         }
@@ -411,7 +432,7 @@ namespace Game
                 }
                 if (!deleted)
                 {
-                    bullets[i].move();
+                    bullets[i].move(deltaTime);
                     RectangleF recBullet = bulletsContainers[i];
                     recBullet.Location = bullets[i].getLocation();
                     bulletsContainers[i] = recBullet;
@@ -421,11 +442,11 @@ namespace Game
 
         public void gameOver()
         {
-            popUp = new PopUpHandler("Paused", new string[] { "Resume", "Shop", "Quit" }, false, pnlMain, timers, account);
-            backgroundUI = popUp.getPopUp();
-            popUp.getPopUp();
             waveHndlr.pause();
             drawTimer.Stop();
+            EndGameForm statsFrm = new EndGameForm(waveHndlr.getWave(),turretsPlaced,damageDealt,kills,DateTime.Now - gameStart);
+            statsFrm.Show();
+            gameForm.Hide();
         }
 
         public void pauseGame(bool pause)
@@ -433,7 +454,7 @@ namespace Game
             lastPaused = DateTime.Now;
             if (pause)
             {
-                popUp = new PopUpHandler("Paused", new string[]{"Resume","Menu", "Quit"}, true, pnlMain, timers, account);
+                popUp = new PopUpHandler("Paused", new string[]{"Resume","Menu", "Quit"}, true, pnlMain, timers);
                 backgroundUI = popUp.getPopUp();
                 popUp.getPopUp();
                 waveHndlr.pause();
@@ -441,7 +462,14 @@ namespace Game
             }
             else
             {
-                backgroundUI.Dispose();
+                try
+                {
+                    backgroundUI.Dispose();
+                }
+                catch
+                {
+
+                }
                 waveHndlr.play();
                 drawTimer.Start();
             }
@@ -458,16 +486,22 @@ namespace Game
                     {
                         if (zombiesContainers[i].IntersectsWith(bulletsContainers[j]))
                         {
+                            int healtBefore = zombies[i].getHp();
                             bullets.RemoveAt(j);
                             bulletsContainers.RemoveAt(j);
                             deleted = zombies[i].damage(20);
+                            int healtAfter = zombies[i].getHp();
+                            damageDealt += healtBefore - healtAfter;
+
+
                             if (deleted)
                             {
-                            
+                                
                                 uiHandler.addCoins(zombies[i].getMaxHp()/rn.Next(4,5));
                                 zombies.RemoveAt(i);
                                 zombiesContainers.RemoveAt(i);
                                 waveHndlr.zombieKilled();
+                                kills++;
                             }
                         }
                     }
@@ -528,7 +562,7 @@ namespace Game
                         }
                     }
                     zombies[i].setDestenation(player.getPosition());
-                    zombies[i].move(zombieCollisions);
+                    zombies[i].move(deltaTime,zombieCollisions);
 
                     RectangleF recZombie = zombiesContainers[i];
                     recZombie.Location = zombies[i].getLocation();
@@ -540,11 +574,10 @@ namespace Game
         public void draw(Graphics gData)
         {
             g = gData;
-            if ((DateTime.Now - lastFrame).Milliseconds != 0)
+            Console.WriteLine(timedif);
+            if (timedif!=0)
             {
-                Console.WriteLine(DateTime.Now - lastFrame);
-                g.DrawString($"{1000 / (DateTime.Now - lastFrame).Milliseconds} FPS", new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold), Brushes.White, 5, 5);
-                lastFrame = DateTime.Now;
+                g.DrawString($"{(int)(1000  / timedif)} FPS", new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold), Brushes.White, 5, 5);
             }
 
             g.DrawString(uiHandler.getCoins().ToString(), new Font(FontFamily.GenericSansSerif, 24, FontStyle.Bold), Brushes.White, pnlMain.Width-150, 10);

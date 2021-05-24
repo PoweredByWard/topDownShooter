@@ -33,3 +33,4 @@ C:\Users\wardd\source\repos\Game\Game\bin\Debug\System.Runtime.CompilerServices.
 C:\Users\wardd\source\repos\Game\Game\obj\Debug\Game.csproj.CopyComplete
 C:\Users\wardd\source\repos\Game\Game\obj\Debug\Game.MainScreen.resources
 C:\Users\wardd\source\repos\Game\Game\obj\Debug\Game.StartForm.resources
+C:\Users\wardd\source\repos\Game\Game\obj\Debug\Game.EndGameForm.resources

@@ -78,7 +78,7 @@
             this.pbRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbRegister.Location = new System.Drawing.Point(73, 97);
             this.pbRegister.Name = "pbRegister";
-            this.pbRegister.Size = new System.Drawing.Size(200, 50);
+            this.pbRegister.Size = new System.Drawing.Size(182, 50);
             this.pbRegister.TabIndex = 6;
             this.pbRegister.TabStop = false;
             this.pbRegister.Click += new System.EventHandler(this.pbRegister_Click);

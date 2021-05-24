@@ -21,13 +21,10 @@ namespace Game
         Label Description;
         Label button;
         bool isEndScreen;
-
-        AccountHandler account;
-        public PopUpHandler(string titleText, string[] ButtonTexts, bool sort,Panel paste,List<Timer> playTimers, AccountHandler accountData, string Description = null)
+        public PopUpHandler(string titleText, string[] ButtonTexts, bool sort,Panel paste,List<Timer> playTimers, string Description = null)
         {
             if (sort)
             {
-                account = accountData;
                 timers = playTimers;
                 main = paste;
                 background = new Panel();
@@ -109,7 +106,7 @@ namespace Game
             }
             if (!opened)
             {
-                MainScreen menu = new MainScreen(account);
+                MainScreen menu = new MainScreen();
                 menu.Show();
             }
         }

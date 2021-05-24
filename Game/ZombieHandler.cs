@@ -17,8 +17,8 @@ namespace Game
         private Image skinImg;
         private int speed;
         private int attackDamage;
-        private int x;
-        private int y;
+        private double x;
+        private double y;
         private double angle;
         private int health;
         private int maxhealth;
@@ -85,25 +85,25 @@ namespace Game
         public Point getCenterPosition()
         {
             Image skin = getSkin();
-            return new Point(x - (skin.Width / 2), y - (skin.Width / 2));
+            return new Point((int)x - (skin.Width / 2), (int)y - (skin.Width / 2));
         }
 
         public Point getLocation()
         {
-            return new Point(x, y);
+            return new Point((int)x, (int)y);
         }
 
-        public void move(bool[] collisions = null)
+        public void move(double deltaTime, bool[] collisions = null)
         {
-            int xDiff = destenation.X - x;
-            int yDiff = destenation.Y - y;
+            double xDiff = destenation.X - x;
+            double yDiff = destenation.Y - y;
             angle = Math.Atan2(xDiff, yDiff) * (-180 / Math.PI);
             angle += 90;
             if (collisions != null)
             {
 
-                int newX = (int)(x + speed * Math.Cos(angle * (Math.PI / 180.0)));
-                int newY = (int)(y + speed * Math.Sin(angle * (Math.PI / 180.0)));
+                double newX = (x + speed * deltaTime * Math.Cos(angle * (Math.PI / 180.0)));
+                double newY = (y + speed * deltaTime * Math.Sin(angle * (Math.PI / 180.0)));
 
                 if (newX > x && collisions[0] || newX < x && collisions[1]) newX = x;
                 if (newY > y && collisions[2] || newY < y && collisions[3]) newY = y;
