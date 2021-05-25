@@ -27,7 +27,9 @@ namespace Game
             damageDealt = damageDealtData;
             kills = killsData;
             duration = durationData;
-            coins = (int)Math.Round((kills * 3 + duration.TotalMinutes * 5 > 50 ? 10 : duration.TotalMinutes * 5) * 10);
+            Console.WriteLine(kills);
+            coins = (int)Math.Round((kills * 2 + (duration.TotalMinutes * 5 > 50 ? 50 : duration.TotalMinutes * 5)) * 3);
+            
 
             InitializeComponent();
             createBoard();

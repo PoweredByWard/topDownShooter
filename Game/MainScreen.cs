@@ -133,15 +133,8 @@ namespace Game
             }
         }
 
-        private void pbExit_Click(object sender, EventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-        }
-
-        private void pbInventory_Click(object sender, EventArgs e)
-        {
-            showInventory();
-        }
+        private void pbExit_Click(object sender, EventArgs e) => System.Windows.Forms.Application.Exit();
+        private void pbInventory_Click(object sender, EventArgs e) => showInventory();
 
         private void showInventory()
         {
@@ -270,10 +263,6 @@ namespace Game
 
         private Panel createInventoryItem(DataRow item)
         {
-            Font lblFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
-            ContentAlignment align = ContentAlignment.TopCenter;
-            AnchorStyles anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
-
             Panel inventoryItem = new Panel();
             inventoryItem.Size = new Size(100,120);
             string[] rgb = item[5].ToString().Split(',');
@@ -286,9 +275,39 @@ namespace Game
             return inventoryItem;
         }
 
-        private void activated(object sender, EventArgs e)
+        private void activated(object sender, EventArgs e) => refreshCoins();
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
-            refreshCoins();
+            TextBox txt = (TextBox)sender;
+            DataTable result = DataHandler.findUser(txt.Text);
+
+            tlpSearch.Controls.Clear();
+
+            Font lblFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
+            ContentAlignment align = ContentAlignment.BottomCenter;
+            AnchorStyles anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
+            tlpSearch.RowCount = 0;
+            tlpSearch.RowStyles.Clear();
+            tlpSearch.Height = 20 * result.Rows.Count;
+            for (int i = 0; i < result.Rows.Count; i++)
+            {
+                tlpSearch.RowCount++;
+                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute,20));
+                tlpSearch.Controls.Add(new Label { Text = result.Rows[i][0].ToString(), BackColor=Color.Red,Width = tlpSearch.Width, Font = lblFont, TextAlign = align, ForeColor = Color.White }, 0, i);
+                Console.WriteLine(tlpSearch.Controls.Count);
+                Console.WriteLine(tlpSearch.RowCount);
+            }
+        }
+
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            tlpSearch.Visible = false;
+        }
+
+        private void textBox1_Enter(object sender, EventArgs e)
+        {
+            tlpSearch.Visible = true;
         }
     }
 }

@@ -190,6 +190,23 @@ namespace Game
             return data;
         }
 
+        public static DataTable findUser(string searchValue)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT username  FROM Game_Accounts WHERE username LIKE CONCAT('%', @search, '%') LIMIT 5", connection);
+                cmd.Parameters.AddWithValue("@search", searchValue);
+                Console.WriteLine(searchValue);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                Console.WriteLine(data.Rows.Count);
+                
+            }
+            return data;
+        }
         public static DataTable getProfile(string username)
         {
             data = new DataTable();
