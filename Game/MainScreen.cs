@@ -13,6 +13,7 @@ namespace Game
     public partial class MainScreen : Form
     {
         List<Panel> tabs;
+        string account;
         public MainScreen()
         {
             InitializeComponent();
@@ -54,6 +55,7 @@ namespace Game
 
         private void showProfile(string username = null)
         {
+
             foreach (Panel pnl in tabs)
             {
                 if (pnl.Name != "pnlProfile")
@@ -65,8 +67,21 @@ namespace Game
                     pnl.Visible = true;
                 }
             }
+            account = username == null ? AccountHandler.getUsername() : username;
+
+            lblProfileTitle.Text = account != AccountHandler.getUsername() ? $"{account}'s Profile" : "Your profile";
+
+            if (!DataHandler.isAdmin(account))pbDelete.Visible = DataHandler.isAdmin(AccountHandler.getUsername());
+
+            tlpSearch.Visible = false;
+            if (DataHandler.isAdmin(AccountHandler.getUsername()))
+            {
+                txtSearch.Visible = true;
+                pbReset.Visible = true;
+            }
+
             const int ROW_HEIGHT = 30;
-            DataTable tbl = DataHandler.getProfile(username==null?AccountHandler.getUsername():username);
+            DataTable tbl = DataHandler.getProfile(account);
 
             tlpStats.Controls.Clear();
             tlpStats.RowStyles.RemoveAt(0);
@@ -275,39 +290,93 @@ namespace Game
             return inventoryItem;
         }
 
-        private void activated(object sender, EventArgs e) => refreshCoins();
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void showResultsSearch(string searchValue)
         {
-            TextBox txt = (TextBox)sender;
-            DataTable result = DataHandler.findUser(txt.Text);
+            tlpSearch.Visible = searchValue != "";
+
+            DataTable result = DataHandler.findUser(searchValue);
 
             tlpSearch.Controls.Clear();
 
             Font lblFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
-            ContentAlignment align = ContentAlignment.BottomCenter;
-            AnchorStyles anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
             tlpSearch.RowCount = 0;
             tlpSearch.RowStyles.Clear();
-            tlpSearch.Height = 20 * result.Rows.Count;
+            int height = 0;
             for (int i = 0; i < result.Rows.Count; i++)
             {
                 tlpSearch.RowCount++;
-                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute,20));
-                tlpSearch.Controls.Add(new Label { Text = result.Rows[i][0].ToString(), BackColor=Color.Red,Width = tlpSearch.Width, Font = lblFont, TextAlign = align, ForeColor = Color.White }, 0, i);
-                Console.WriteLine(tlpSearch.Controls.Count);
-                Console.WriteLine(tlpSearch.RowCount);
+                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute, 21));
+
+                Label lblSearchItem = new Label {
+                    Text = result.Rows[i][0].ToString(),
+                    Height = 20,
+                    BackColor = Color.White,
+                    Width = tlpSearch.Width,
+                    Font = lblFont,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom),
+                    ForeColor = Color.Black,
+                    Cursor = Cursors.Hand
+                };
+                height += lblSearchItem.Height;
+                lblSearchItem.Click += new EventHandler(searchClick);
+                tlpSearch.Controls.Add(lblSearchItem, 0, i);
             }
+
+            if (result.Rows.Count==0)
+            {
+                tlpSearch.RowCount++;
+                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute, 21));
+
+                Label lblSearchItem = new Label
+                {
+                    Text = "No results",
+                    Height = 20,
+                    BackColor = Color.White,
+                    Width = tlpSearch.Width,
+                    Font = lblFont,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom),
+                    ForeColor = Color.Black,
+                };
+                height += lblSearchItem.Height;
+                tlpSearch.Controls.Add(lblSearchItem, 0, 0);
+            }
+
+            tlpSearch.Height = height;
         }
 
-        private void textBox1_Leave(object sender, EventArgs e)
+        private void activated(object sender, EventArgs e) => refreshCoins();
+
+        private void txtSearch_TextChanged(object sender, EventArgs e) => showResultsSearch(((TextBox)sender).Text);
+
+        private void searchClick(object sender, EventArgs e) => showProfile(((Label)sender).Text);
+
+        private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
+
+        private void delete_Click(object sender, EventArgs e)
         {
-            tlpSearch.Visible = false;
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No) return;
+            bool deleted = DataHandler.deleteAccount(account);
+            if (deleted) 
+            {
+                MessageBox.Show($"{account}'s Account got deleted.");
+                showProfile();
+            }else MessageBox.Show($"Couldn't delete {account}'s account.");
         }
 
-        private void textBox1_Enter(object sender, EventArgs e)
+        private void reset_Click(object sender, EventArgs e)
         {
-            tlpSearch.Visible = true;
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to reset {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No) return;
+            bool reset = DataHandler.resetAccount(account);
+            if (reset)
+            {
+                MessageBox.Show($"{account}'s Account got reset.");
+                showProfile(account);
+            }
+            else MessageBox.Show($"Couldn't reset {account}'s account.");
         }
     }
 }

@@ -34,7 +34,11 @@
             this.pbScoreboard = new System.Windows.Forms.PictureBox();
             this.pbExit = new System.Windows.Forms.PictureBox();
             this.pnlProfile = new System.Windows.Forms.Panel();
-            this.label6 = new System.Windows.Forms.Label();
+            this.pbReset = new System.Windows.Forms.PictureBox();
+            this.pbDelete = new System.Windows.Forms.PictureBox();
+            this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.lblProfileTitle = new System.Windows.Forms.Label();
             this.tlpStats = new System.Windows.Forms.TableLayoutPanel();
             this.pnlScoreboard = new System.Windows.Forms.Panel();
             this.tlpScoreboard = new System.Windows.Forms.TableLayoutPanel();
@@ -57,6 +61,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbExit)).BeginInit();
             this.pnlProfile.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbReset)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).BeginInit();
             this.pnlScoreboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlInventory.SuspendLayout();
@@ -120,27 +126,84 @@
             this.pnlProfile.BackColor = System.Drawing.Color.Transparent;
             this.pnlProfile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlProfile.BackgroundImage")));
             this.pnlProfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pnlProfile.Controls.Add(this.label6);
+            this.pnlProfile.Controls.Add(this.pbReset);
+            this.pnlProfile.Controls.Add(this.pbDelete);
+            this.pnlProfile.Controls.Add(this.tlpSearch);
+            this.pnlProfile.Controls.Add(this.txtSearch);
+            this.pnlProfile.Controls.Add(this.lblProfileTitle);
             this.pnlProfile.Controls.Add(this.tlpStats);
             this.pnlProfile.Location = new System.Drawing.Point(258, 3);
             this.pnlProfile.Name = "pnlProfile";
             this.pnlProfile.Size = new System.Drawing.Size(493, 474);
             this.pnlProfile.TabIndex = 6;
             // 
-            // label6
+            // pbReset
             // 
-            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.pbReset.BackColor = System.Drawing.Color.Transparent;
+            this.pbReset.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbReset.BackgroundImage")));
+            this.pbReset.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbReset.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbReset.Location = new System.Drawing.Point(275, 391);
+            this.pbReset.Name = "pbReset";
+            this.pbReset.Size = new System.Drawing.Size(182, 48);
+            this.pbReset.TabIndex = 8;
+            this.pbReset.TabStop = false;
+            this.pbReset.Visible = false;
+            this.pbReset.Click += new System.EventHandler(this.reset_Click);
+            // 
+            // pbDelete
+            // 
+            this.pbDelete.BackColor = System.Drawing.Color.Transparent;
+            this.pbDelete.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbDelete.BackgroundImage")));
+            this.pbDelete.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbDelete.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbDelete.Location = new System.Drawing.Point(41, 391);
+            this.pbDelete.Name = "pbDelete";
+            this.pbDelete.Size = new System.Drawing.Size(182, 48);
+            this.pbDelete.TabIndex = 7;
+            this.pbDelete.TabStop = false;
+            this.pbDelete.Visible = false;
+            this.pbDelete.Click += new System.EventHandler(this.delete_Click);
+            // 
+            // tlpSearch
+            // 
+            this.tlpSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label6.AutoSize = true;
-            this.label6.BackColor = System.Drawing.Color.Transparent;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold);
-            this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(174, 138);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(147, 31);
-            this.label6.TabIndex = 3;
-            this.label6.Text = "Your stats";
+            this.tlpSearch.ColumnCount = 1;
+            this.tlpSearch.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSearch.Location = new System.Drawing.Point(41, 169);
+            this.tlpSearch.Margin = new System.Windows.Forms.Padding(0);
+            this.tlpSearch.Name = "tlpSearch";
+            this.tlpSearch.RowCount = 1;
+            this.tlpSearch.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tlpSearch.Size = new System.Drawing.Size(127, 10);
+            this.tlpSearch.TabIndex = 6;
+            this.tlpSearch.Visible = false;
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Location = new System.Drawing.Point(41, 148);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(127, 20);
+            this.txtSearch.TabIndex = 5;
+            this.txtSearch.Visible = false;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // lblProfileTitle
+            // 
+            this.lblProfileTitle.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblProfileTitle.AutoSize = true;
+            this.lblProfileTitle.BackColor = System.Drawing.Color.Transparent;
+            this.lblProfileTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold);
+            this.lblProfileTitle.ForeColor = System.Drawing.Color.White;
+            this.lblProfileTitle.Location = new System.Drawing.Point(174, 138);
+            this.lblProfileTitle.Name = "lblProfileTitle";
+            this.lblProfileTitle.Size = new System.Drawing.Size(164, 31);
+            this.lblProfileTitle.TabIndex = 3;
+            this.lblProfileTitle.Text = "Your profile";
             // 
             // tlpStats
             // 
@@ -184,7 +247,7 @@
             this.tlpScoreboard.Location = new System.Drawing.Point(32, 196);
             this.tlpScoreboard.Name = "tlpScoreboard";
             this.tlpScoreboard.RowCount = 1;
-            this.tlpScoreboard.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 243F));
+            this.tlpScoreboard.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 258F));
             this.tlpScoreboard.Size = new System.Drawing.Size(431, 258);
             this.tlpScoreboard.TabIndex = 8;
             // 
@@ -372,9 +435,9 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
             this.Controls.Add(this.pnlInventory);
-            this.Controls.Add(this.pnlProfile);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -383,12 +446,15 @@
             this.Text = "MainScreen";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(132)))), ((int)(((byte)(73)))));
             this.Activated += new System.EventHandler(this.activated);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainScreen_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbExit)).EndInit();
             this.pnlProfile.ResumeLayout(false);
             this.pnlProfile.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbReset)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();
             this.pnlScoreboard.ResumeLayout(false);
             this.pnlScoreboard.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -418,12 +484,16 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Panel pnlInventory;
         private System.Windows.Forms.TableLayoutPanel tlpStats;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblProfileTitle;
         private System.Windows.Forms.TableLayoutPanel tlpPlayer;
         private System.Windows.Forms.TableLayoutPanel tlpGun;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.PictureBox pbCoin;
         private System.Windows.Forms.Label lblCoin;
+        private System.Windows.Forms.TableLayoutPanel tlpSearch;
+        private System.Windows.Forms.TextBox txtSearch;
+        private System.Windows.Forms.PictureBox pbDelete;
+        private System.Windows.Forms.PictureBox pbReset;
     }
 }

@@ -252,6 +252,50 @@ namespace Game
             }
         }
 
+        public static bool isAdmin(string username)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT admin FROM Game_Accounts  WHERE username =  @username AND admin = 1", connection);
+                cmd.Parameters.AddWithValue("@username", username);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count > 0) return true;
+            }
+            return false;
+        }
+
+        public static bool deleteAccount(string username)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM Game_Accounts WHERE username = @username AND admin = 0", connection);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return true;
+            }
+            return false;
+        }
+        
+        public static bool resetAccount(string username)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM Game_Matches WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username); UPDATE Game_Accounts SET coins = 0 WHERE username = @username; DELETE FROM Game_Inventory WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND item IN (SELECT item_id FROM Game_Items WHERE price !=0)", connection);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return true;
+            }
+            return false;
+        }
+
         public static void saveGame(int wave,int kills,int turretsPlaced,int damgeDealt,TimeSpan duration)
         {
             if (datastatus)
