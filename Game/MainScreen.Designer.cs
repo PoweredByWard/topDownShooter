@@ -50,12 +50,22 @@
             this.lblScoreboard = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pnlInventory = new System.Windows.Forms.Panel();
+            this.pbGunAdd = new System.Windows.Forms.PictureBox();
+            this.pbPlayerAdd = new System.Windows.Forms.PictureBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.tlpGun = new System.Windows.Forms.TableLayoutPanel();
             this.tlpPlayer = new System.Windows.Forms.TableLayoutPanel();
             this.pbCoin = new System.Windows.Forms.PictureBox();
             this.lblCoin = new System.Windows.Forms.Label();
+            this.pnlItem = new System.Windows.Forms.Panel();
+            this.tbPower = new System.Windows.Forms.TrackBar();
+            this.label6 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.pbCancel = new System.Windows.Forms.PictureBox();
+            this.pbSave = new System.Windows.Forms.PictureBox();
+            this.pbItemPreview = new System.Windows.Forms.PictureBox();
+            this.lblItem = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
@@ -66,7 +76,14 @@
             this.pnlScoreboard.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.pnlInventory.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGunAdd)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPlayerAdd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoin)).BeginInit();
+            this.pnlItem.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbPower)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSave)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).BeginInit();
             this.SuspendLayout();
             // 
             // pbPlay
@@ -336,6 +353,8 @@
             this.pnlInventory.BackColor = System.Drawing.Color.Transparent;
             this.pnlInventory.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlInventory.BackgroundImage")));
             this.pnlInventory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlInventory.Controls.Add(this.pbGunAdd);
+            this.pnlInventory.Controls.Add(this.pbPlayerAdd);
             this.pnlInventory.Controls.Add(this.label8);
             this.pnlInventory.Controls.Add(this.label7);
             this.pnlInventory.Controls.Add(this.tlpGun);
@@ -344,6 +363,23 @@
             this.pnlInventory.Name = "pnlInventory";
             this.pnlInventory.Size = new System.Drawing.Size(493, 474);
             this.pnlInventory.TabIndex = 9;
+            // 
+            // pbGunAdd
+            // 
+            this.pbGunAdd.Location = new System.Drawing.Point(301, 285);
+            this.pbGunAdd.Name = "pbGunAdd";
+            this.pbGunAdd.Size = new System.Drawing.Size(91, 28);
+            this.pbGunAdd.TabIndex = 6;
+            this.pbGunAdd.TabStop = false;
+            // 
+            // pbPlayerAdd
+            // 
+            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 130);
+            this.pbPlayerAdd.Name = "pbPlayerAdd";
+            this.pbPlayerAdd.Size = new System.Drawing.Size(91, 28);
+            this.pbPlayerAdd.TabIndex = 5;
+            this.pbPlayerAdd.TabStop = false;
+            this.pbPlayerAdd.Click += new System.EventHandler(this.showPanelItem);
             // 
             // label8
             // 
@@ -420,6 +456,101 @@
             this.lblCoin.TabIndex = 10;
             this.lblCoin.Text = "Loading...";
             // 
+            // pnlItem
+            // 
+            this.pnlItem.BackColor = System.Drawing.Color.Transparent;
+            this.pnlItem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlItem.BackgroundImage")));
+            this.pnlItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlItem.Controls.Add(this.tbPower);
+            this.pnlItem.Controls.Add(this.label6);
+            this.pnlItem.Controls.Add(this.textBox1);
+            this.pnlItem.Controls.Add(this.pbCancel);
+            this.pnlItem.Controls.Add(this.pbSave);
+            this.pnlItem.Controls.Add(this.pbItemPreview);
+            this.pnlItem.Controls.Add(this.lblItem);
+            this.pnlItem.Location = new System.Drawing.Point(258, 3);
+            this.pnlItem.Name = "pnlItem";
+            this.pnlItem.Size = new System.Drawing.Size(493, 474);
+            this.pnlItem.TabIndex = 10;
+            // 
+            // tbPower
+            // 
+            this.tbPower.BackColor = System.Drawing.Color.White;
+            this.tbPower.LargeChange = 1;
+            this.tbPower.Location = new System.Drawing.Point(219, 232);
+            this.tbPower.Name = "tbPower";
+            this.tbPower.Size = new System.Drawing.Size(119, 45);
+            this.tbPower.TabIndex = 9;
+            this.tbPower.Value = 1;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.ForeColor = System.Drawing.Color.White;
+            this.label6.Location = new System.Drawing.Point(160, 199);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 16);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Name:";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(219, 198);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(116, 20);
+            this.textBox1.TabIndex = 7;
+            // 
+            // pbCancel
+            // 
+            this.pbCancel.BackColor = System.Drawing.Color.Transparent;
+            this.pbCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbCancel.BackgroundImage")));
+            this.pbCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbCancel.Location = new System.Drawing.Point(281, 391);
+            this.pbCancel.Name = "pbCancel";
+            this.pbCancel.Size = new System.Drawing.Size(172, 48);
+            this.pbCancel.TabIndex = 6;
+            this.pbCancel.TabStop = false;
+            this.pbCancel.Click += new System.EventHandler(this.pbCancel_Click);
+            // 
+            // pbSave
+            // 
+            this.pbSave.BackColor = System.Drawing.Color.Transparent;
+            this.pbSave.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSave.BackgroundImage")));
+            this.pbSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbSave.Location = new System.Drawing.Point(41, 391);
+            this.pbSave.Name = "pbSave";
+            this.pbSave.Size = new System.Drawing.Size(172, 48);
+            this.pbSave.TabIndex = 5;
+            this.pbSave.TabStop = false;
+            // 
+            // pbItemPreview
+            // 
+            this.pbItemPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pbItemPreview.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbItemPreview.Location = new System.Drawing.Point(41, 196);
+            this.pbItemPreview.Name = "pbItemPreview";
+            this.pbItemPreview.Size = new System.Drawing.Size(100, 84);
+            this.pbItemPreview.TabIndex = 4;
+            this.pbItemPreview.TabStop = false;
+            this.pbItemPreview.Click += new System.EventHandler(this.pbItemPreview_Click);
+            // 
+            // lblItem
+            // 
+            this.lblItem.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblItem.AutoSize = true;
+            this.lblItem.BackColor = System.Drawing.Color.Transparent;
+            this.lblItem.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold);
+            this.lblItem.ForeColor = System.Drawing.Color.White;
+            this.lblItem.Location = new System.Drawing.Point(174, 148);
+            this.lblItem.Name = "lblItem";
+            this.lblItem.Size = new System.Drawing.Size(152, 31);
+            this.lblItem.TabIndex = 3;
+            this.lblItem.Text = "ADD ITEM";
+            this.lblItem.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -435,9 +566,10 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pnlItem);
+            this.Controls.Add(this.pnlInventory);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
-            this.Controls.Add(this.pnlInventory);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -460,7 +592,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.pnlInventory.ResumeLayout(false);
             this.pnlInventory.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbGunAdd)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbPlayerAdd)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoin)).EndInit();
+            this.pnlItem.ResumeLayout(false);
+            this.pnlItem.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.tbPower)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -495,5 +635,15 @@
         private System.Windows.Forms.TextBox txtSearch;
         private System.Windows.Forms.PictureBox pbDelete;
         private System.Windows.Forms.PictureBox pbReset;
+        private System.Windows.Forms.PictureBox pbGunAdd;
+        private System.Windows.Forms.PictureBox pbPlayerAdd;
+        private System.Windows.Forms.Panel pnlItem;
+        private System.Windows.Forms.PictureBox pbItemPreview;
+        private System.Windows.Forms.Label lblItem;
+        private System.Windows.Forms.PictureBox pbSave;
+        private System.Windows.Forms.TrackBar tbPower;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.PictureBox pbCancel;
     }
 }

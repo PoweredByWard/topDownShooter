@@ -328,14 +328,15 @@ namespace Game
             return data;
         }
 
-        public static DataTable getItems(string type)
+        public static DataTable getItems(string type = null)
         {
             data = new DataTable();
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_Items WHERE type = @type ORDER BY price", connection);
-                cmd.Parameters.AddWithValue("@type", type);
+                
+                MySqlCommand cmd = new MySqlCommand(type==null? "SELECT *  FROM Game_Items ORDER BY price" : "SELECT *  FROM Game_Items WHERE type = @type ORDER BY price", connection);
+                if (type!=null)cmd.Parameters.AddWithValue("@type",type);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
                 connection.Close();

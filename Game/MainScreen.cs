@@ -18,6 +18,7 @@ namespace Game
         {
             InitializeComponent();
             tabs = this.Controls.OfType<Panel>().ToList();
+            ResourceHandler.checkResources();
             refreshCoins();
             showProfile();
             
@@ -25,6 +26,7 @@ namespace Game
 
         private void pbPlay_Click(object sender, EventArgs e)
         {
+            ResourceHandler.checkResources();
             bool opened = false;
             for (int i = 0; i < Application.OpenForms.Count; i++)
             {
@@ -353,6 +355,7 @@ namespace Game
         private void searchClick(object sender, EventArgs e) => showProfile(((Label)sender).Text);
 
         private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
+        private void pbCancel_Click(object sender, EventArgs e) => showInventory();
 
         private void delete_Click(object sender, EventArgs e)
         {
@@ -378,6 +381,39 @@ namespace Game
             }
             else MessageBox.Show($"Couldn't reset {account}'s account.");
         }
+
+        private void showPanelItem(object sender, EventArgs e)
+        {
+            foreach (Panel pnl in tabs)
+            {
+                if (pnl.Name != "pnlItem")
+                {
+                    pnl.Visible = false;
+                }
+                else
+                {
+                    pnl.Visible = true;
+                }
+            }
+            tbPower.Maximum = 2;
+        }
+
+        private void pbItemPreview_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog Dialog = new OpenFileDialog
+            {
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Title ="Select Image",
+                Filter = "Image Files|*.jpg;*.jpeg;*.png;",
+            };
+
+            if (Dialog.ShowDialog() == DialogResult.OK)
+            {
+                Console.WriteLine(Dialog.FileName);
+            }
+        }
+
     }
 }
 
