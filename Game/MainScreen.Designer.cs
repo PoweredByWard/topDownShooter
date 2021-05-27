@@ -59,6 +59,9 @@
             this.pbCoin = new System.Windows.Forms.PictureBox();
             this.lblCoin = new System.Windows.Forms.Label();
             this.pnlItem = new System.Windows.Forms.Panel();
+            this.pbColor = new System.Windows.Forms.PictureBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.tbPower = new System.Windows.Forms.TrackBar();
             this.label6 = new System.Windows.Forms.Label();
             this.tbName = new System.Windows.Forms.TextBox();
@@ -66,9 +69,8 @@
             this.pbSave = new System.Windows.Forms.PictureBox();
             this.pbItemPreview = new System.Windows.Forms.PictureBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.pbColor = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tbPrice = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
@@ -83,11 +85,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbPlayerAdd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoin)).BeginInit();
             this.pnlItem.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbPower)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbColor)).BeginInit();
             this.SuspendLayout();
             // 
             // pbPlay
@@ -370,7 +372,7 @@
             // 
             // pbGunAdd
             // 
-            this.pbGunAdd.Location = new System.Drawing.Point(301, 285);
+            this.pbGunAdd.Location = new System.Drawing.Point(301, 290);
             this.pbGunAdd.Name = "pbGunAdd";
             this.pbGunAdd.Size = new System.Drawing.Size(91, 28);
             this.pbGunAdd.TabIndex = 6;
@@ -379,7 +381,7 @@
             // 
             // pbPlayerAdd
             // 
-            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 127);
+            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 134);
             this.pbPlayerAdd.Name = "pbPlayerAdd";
             this.pbPlayerAdd.Size = new System.Drawing.Size(91, 28);
             this.pbPlayerAdd.TabIndex = 5;
@@ -466,6 +468,8 @@
             this.pnlItem.BackColor = System.Drawing.Color.Transparent;
             this.pnlItem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlItem.BackgroundImage")));
             this.pnlItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlItem.Controls.Add(this.label11);
+            this.pnlItem.Controls.Add(this.tbPrice);
             this.pnlItem.Controls.Add(this.pbColor);
             this.pnlItem.Controls.Add(this.label10);
             this.pnlItem.Controls.Add(this.label9);
@@ -481,11 +485,44 @@
             this.pnlItem.Size = new System.Drawing.Size(493, 474);
             this.pnlItem.TabIndex = 10;
             // 
+            // pbColor
+            // 
+            this.pbColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pbColor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbColor.Location = new System.Drawing.Point(219, 310);
+            this.pbColor.Name = "pbColor";
+            this.pbColor.Size = new System.Drawing.Size(116, 30);
+            this.pbColor.TabIndex = 12;
+            this.pbColor.TabStop = false;
+            this.pbColor.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(158, 312);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(49, 16);
+            this.label10.TabIndex = 11;
+            this.label10.Text = "Color:";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(160, 259);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(55, 16);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Power:";
+            // 
             // tbPower
             // 
             this.tbPower.BackColor = System.Drawing.Color.White;
             this.tbPower.LargeChange = 1;
-            this.tbPower.Location = new System.Drawing.Point(219, 232);
+            this.tbPower.Location = new System.Drawing.Point(219, 259);
             this.tbPower.Name = "tbPower";
             this.tbPower.Size = new System.Drawing.Size(119, 45);
             this.tbPower.TabIndex = 9;
@@ -561,38 +598,24 @@
             this.lblItem.Text = "ADD ITEM";
             this.lblItem.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
-            // label9
+            // label11
             // 
-            this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(160, 232);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(55, 16);
-            this.label9.TabIndex = 10;
-            this.label9.Text = "Power:";
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(159, 228);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(48, 16);
+            this.label11.TabIndex = 14;
+            this.label11.Text = "Price:";
             // 
-            // label10
+            // tbPrice
             // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.ForeColor = System.Drawing.Color.White;
-            this.label10.Location = new System.Drawing.Point(158, 285);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(49, 16);
-            this.label10.TabIndex = 11;
-            this.label10.Text = "Color:";
-            // 
-            // pbColor
-            // 
-            this.pbColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.pbColor.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbColor.Location = new System.Drawing.Point(219, 283);
-            this.pbColor.Name = "pbColor";
-            this.pbColor.Size = new System.Drawing.Size(116, 30);
-            this.pbColor.TabIndex = 12;
-            this.pbColor.TabStop = false;
-            this.pbColor.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.tbPrice.Location = new System.Drawing.Point(218, 227);
+            this.tbPrice.Name = "tbPrice";
+            this.tbPrice.Size = new System.Drawing.Size(116, 20);
+            this.tbPrice.TabIndex = 13;
+            this.tbPrice.TextChanged += new System.EventHandler(this.tbPrice_TextChanged);
             // 
             // MainScreen
             // 
@@ -609,10 +632,10 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
+            this.Controls.Add(this.pnlItem);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -640,11 +663,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCoin)).EndInit();
             this.pnlItem.ResumeLayout(false);
             this.pnlItem.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbPower)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbColor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -692,5 +715,7 @@
         private System.Windows.Forms.PictureBox pbColor;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox tbPrice;
     }
 }

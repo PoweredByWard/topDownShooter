@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -190,14 +192,14 @@ namespace Game
             return data;
         }
 
-        public static string getTypeName(string id)
+        public static string getTypeItem(string item)
         {
             data = new DataTable();
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT name FROM Game_Items WHERE item_id = @id", connection);
-                cmd.Parameters.AddWithValue("@id", id);
+                MySqlCommand cmd = new MySqlCommand("SELECT type FROM Game_Items WHERE item_id = @item", connection);
+                cmd.Parameters.AddWithValue("@item", item);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
                 connection.Close();
@@ -206,15 +208,15 @@ namespace Game
             return "";
         }
 
-        public static Size getTypeSizeByName(string name)
+        public static Size getTypeSize(string type)
         {
             data = new DataTable();
             Size size = new Size(0,0);
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT size FROM Game_ItemTypes WHERE name = @name", connection);
-                cmd.Parameters.AddWithValue("@name", name);
+                MySqlCommand cmd = new MySqlCommand("SELECT size FROM Game_ItemTypes WHERE type_id = @type", connection);
+                cmd.Parameters.AddWithValue("@type", type);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
                 connection.Close();
@@ -380,7 +382,6 @@ namespace Game
 
         public static DataTable getItem(string item)
         {
-            Console.WriteLine(item);
             data = new DataTable();
             if (datastatus)
             {
@@ -395,25 +396,79 @@ namespace Game
             return data;
         }
 
-        public static void saveItem(string name,string power,Color color,Image itemImg,string itemID)
+        public static string getTypeIDByName(string name)
         {
-            Console.WriteLine(name);
-            Console.WriteLine(power);
-            Console.WriteLine(color);
-            Console.WriteLine(itemID);
+            data = new DataTable();
             if (datastatus)
             {
                 connection.Open();
 
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO Game_Matches (player,zombie_kills,turrets_placed,wave,duration,damage_dealt) VALUES ((SELECT user_id FROM Game_Accounts WHERE username = @username),@kills,@turrets,@wave,@duration,@damage)", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT type_id  FROM Game_ItemTypes WHERE name = @itemname", connection);
+                cmd.Parameters.AddWithValue("@itemname", name);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count > 0) return data.Rows[0][0].ToString();
+            }
+            return "";
+        }
+
+        public static DataTable getType(string type)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_ItemTypes WHERE type_id = @type", connection);
+                cmd.Parameters.AddWithValue("@type", type);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static void saveItem(string name,string power,Color color,Image itemImg,string price,string itemID,string typeID)
+        {
+            if (datastatus)
+            {
+                byte[] img;
+                using (MemoryStream st = new MemoryStream())
+                {
+                    itemImg.Save(st, ImageFormat.Png);
+                    img = st.ToArray();
+                }
+
+
+                MySqlCommand cmd;
+                DataTable item;
+                DataTable type;
+                if (itemID == null) 
+                {
+                    type = getType(typeID);
+                    cmd = new MySqlCommand("INSERT INTO Game_Items (name,source,type,price,color,image,power) VALUES (@name,@source,@type,@price,@color,@image,@power)", connection);
+                    cmd.Parameters.AddWithValue("@type", type.Rows[0][0]);
+                    ResourceHandler.checkResources();
+                }
+                else
+                {
+                    item = getItem(itemID);
+                    type = getType(item.Rows[0][3].ToString());
+                    cmd = new MySqlCommand("UPDATE Game_Items SET name = @name, source = @source, price = @price, power = @power, color = @color, image = @image WHERE item_id = @itemid", connection);
+                    cmd.Parameters.AddWithValue("@itemid", itemID);
+                }
+                connection.Open();
                 cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@source", $"{type.Rows[0][3]}/{name}.png");
+                cmd.Parameters.AddWithValue("@price", price);
                 cmd.Parameters.AddWithValue("@power", power);
                 cmd.Parameters.AddWithValue("@color", $"{color.R},{color.G},{color.B}");
-                cmd.Parameters.AddWithValue("@damage", itemImg);
-                cmd.Parameters.AddWithValue("@turrets", itemID);
+                cmd.Parameters.AddWithValue("@image", img);
                 cmd.ExecuteNonQuery();
                 connection.Close();
             }
+            
         }
 
         public static DataTable getPlayerItems()

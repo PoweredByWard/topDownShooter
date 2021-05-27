@@ -17,6 +17,7 @@ namespace Game
         string account;
         string previewType;
         string previewItem;
+        string oldPrice;
         public MainScreen()
         {
             InitializeComponent();
@@ -393,7 +394,8 @@ namespace Game
         private void showPanelItem(string type = null)
         {
             previewType = type;
-            if (type != null)previewItem = null;
+            Console.WriteLine(type);
+            if (previewType != null)previewItem = null;
             foreach (Panel pnl in tabs)
             {
                 if (pnl.Name != "pnlItem")
@@ -405,26 +407,36 @@ namespace Game
                     pnl.Visible = true;
                 }
             }
+            Console.WriteLine(previewType);
             tbPower.Maximum = 2;
             if (previewItem != null)
             {
                 DataTable itemtbl = DataHandler.getItem(previewItem);
+
                 byte[] imageBytes = (byte[])itemtbl.Rows[0][6];
-                Console.WriteLine(imageBytes);
                 MemoryStream buf = new MemoryStream(imageBytes);
                 pbItemPreview.BackgroundImage = Image.FromStream(buf, true);
+
                 tbName.Text = itemtbl.Rows[0][1].ToString();
+                tbPrice.Text = itemtbl.Rows[0][4].ToString();
+                oldPrice = itemtbl.Rows[0][4].ToString();
+
                 tbPower.Value = int.Parse(itemtbl.Rows[0][7].ToString());
+
                 string[] rgb = itemtbl.Rows[0][5].ToString().Split(',');
                 Color backgroundColor = Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
+
                 pbColor.BackColor = backgroundColor;
+
                 pbItemPreview.BackColor = backgroundColor;
             }
             else
             {
+                Console.WriteLine(previewType);
                 pbColor.BackColor = Color.Transparent;
                 pbItemPreview.BackColor = Color.Transparent;
                 tbName.Clear();
+                tbPrice.Clear();
                 tbPower.Value = 0;
                 pbItemPreview.BackgroundImage = null;
             }
@@ -439,26 +451,25 @@ namespace Game
 
         private void pbItemPreview_Click(object sender, EventArgs e)
         {
-            
             OpenFileDialog Dialog = new OpenFileDialog
             {
                 CheckFileExists = true,
                 CheckPathExists = true,
                 Title ="Select Image",
-                Filter = "Image Files|*.jpg;*.jpeg;*.png;",
+                Filter = "Image Files|*.png;",
             };
 
             Image item;
-            Size imageSize = DataHandler.getTypeSizeByName(previewType);
             if (Dialog.ShowDialog() == DialogResult.OK)
             {
+                Size imageSize = DataHandler.getTypeSize(previewType==null? DataHandler.getTypeItem(previewItem) : previewType);
                 item = new Bitmap(Image.FromFile(Dialog.FileName),imageSize);
                 pbItemPreview.BackgroundImage = item;
             }
         }
-
-        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem("Player");
-        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem("Gun");
+        
+        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Player"));
+        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Gun"));
 
         private void pbSave_Click(object sender, EventArgs e)
         {
@@ -473,7 +484,7 @@ namespace Game
                 return;
             }
 
-            DataHandler.saveItem(tbName.Text,tbPower.Value.ToString(),pbColor.BackColor, pbItemPreview.BackgroundImage,previewItem);
+            DataHandler.saveItem(tbName.Text,tbPower.Value.ToString(),pbColor.BackColor, pbItemPreview.BackgroundImage, tbPrice.Text, previewItem,previewType);
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -489,12 +500,35 @@ namespace Game
 
             MyDialog.AllowFullOpen = true;
 
-            MyDialog.Color = previewItem != null ? Color.White : Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
+            MyDialog.Color = rgb.Length <3 ? Color.White : Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
 
             if (MyDialog.ShowDialog() == DialogResult.OK)
             {
                 pbColor.BackColor = MyDialog.Color;
                 pbItemPreview.BackColor = MyDialog.Color;
+            }
+        }
+
+        private void tbPrice_TextChanged(object sender, EventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            string text = txt.Text;
+            if (text == "")
+            {
+                txt.Text = "0";
+                return;
+            }
+            try
+            {
+                int.Parse(text);
+                oldPrice = text;
+            }
+            catch (Exception)
+            {
+                int focus = txt.SelectionStart;
+                txt.Text = oldPrice;
+                txt.SelectionStart = focus-1;
+                txt.SelectionLength = 0;
             }
         }
     }
