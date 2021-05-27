@@ -290,10 +290,15 @@ namespace Game
             inventoryItem.BackColor = Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
 
             inventoryItem.BackgroundImage = Image.FromFile(item[2].ToString());
+            inventoryItem.Name = $"pnl{item[0]}";
             inventoryItem.BackgroundImageLayout = ImageLayout.Center;
+            inventoryItem.Cursor = Cursors.Hand;
+
+            inventoryItem.Click += new EventHandler(showItem);
 
             return inventoryItem;
         }
+
 
         private void showResultsSearch(string searchValue)
         {
@@ -385,10 +390,10 @@ namespace Game
             else MessageBox.Show($"Couldn't reset {account}'s account.");
         }
 
-        private void showPanelItem(string type, string item = null)
+        private void showPanelItem(string type = null)
         {
             previewType = type;
-            previewItem = item;
+            if (type != null)previewItem = null;
             foreach (Panel pnl in tabs)
             {
                 if (pnl.Name != "pnlItem")
@@ -401,20 +406,40 @@ namespace Game
                 }
             }
             tbPower.Maximum = 2;
+            if (previewItem != null)
+            {
+                DataTable itemtbl = DataHandler.getItem(previewItem);
+                byte[] imageBytes = (byte[])itemtbl.Rows[0][6];
+                Console.WriteLine(imageBytes);
+                MemoryStream buf = new MemoryStream(imageBytes);
+                pbItemPreview.BackgroundImage = Image.FromStream(buf, true);
+                tbName.Text = itemtbl.Rows[0][1].ToString();
+                tbPower.Value = int.Parse(itemtbl.Rows[0][7].ToString());
+                string[] rgb = itemtbl.Rows[0][5].ToString().Split(',');
+                Color backgroundColor = Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
+                pbColor.BackColor = backgroundColor;
+                pbItemPreview.BackColor = backgroundColor;
+            }
+            else
+            {
+                pbColor.BackColor = Color.Transparent;
+                pbItemPreview.BackColor = Color.Transparent;
+                tbName.Clear();
+                tbPower.Value = 0;
+                pbItemPreview.BackgroundImage = null;
+            }
+        }
+
+        private void showItem(object sender, EventArgs e) 
+        {
+            Panel inventoryItem = (Panel)sender;
+            previewItem = inventoryItem.Name.Substring(3);
+            showPanelItem();
         }
 
         private void pbItemPreview_Click(object sender, EventArgs e)
         {
-            DataTable itemtbl = new DataTable();
-            if (previewItem!=null)
-            {
-                itemtbl = DataHandler.getItem(previewItem);
-
-                byte[] imageBytes = (byte[])itemtbl.Rows[0][6];
-                MemoryStream buf = new MemoryStream(imageBytes);
-                Image img = Image.FromStream(buf, true);
-                pbItemPreview.BackgroundImage = Image.FromStream(buf, true);
-            }
+            
             OpenFileDialog Dialog = new OpenFileDialog
             {
                 CheckFileExists = true,
@@ -434,6 +459,44 @@ namespace Game
 
         private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem("Player");
         private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem("Gun");
+
+        private void pbSave_Click(object sender, EventArgs e)
+        {
+            if (tbName.Text=="")
+            {
+                MessageBox.Show("Name can't be empty");
+                return;
+            }
+            if (tbName.Text.Length>64)
+            {
+                MessageBox.Show("Name is to long.");
+                return;
+            }
+
+            DataHandler.saveItem(tbName.Text,tbPower.Value.ToString(),pbColor.BackColor, pbItemPreview.BackgroundImage,previewItem);
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            DataRow item;
+            string[] rgb = new string[] { };
+            if (previewItem!=null)
+            {
+                item = DataHandler.getItem(previewItem).Rows[0];
+                rgb = item[5].ToString().Split(',');
+            }
+            ColorDialog MyDialog = new ColorDialog();
+
+            MyDialog.AllowFullOpen = true;
+
+            MyDialog.Color = previewItem != null ? Color.White : Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
+
+            if (MyDialog.ShowDialog() == DialogResult.OK)
+            {
+                pbColor.BackColor = MyDialog.Color;
+                pbItemPreview.BackColor = MyDialog.Color;
+            }
+        }
     }
 }
 

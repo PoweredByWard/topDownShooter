@@ -190,6 +190,22 @@ namespace Game
             return data;
         }
 
+        public static string getTypeName(string id)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT name FROM Game_Items WHERE item_id = @id", connection);
+                cmd.Parameters.AddWithValue("@id", id);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count > 0) return data.Rows[0][0].ToString();
+            }
+            return "";
+        }
+
         public static Size getTypeSizeByName(string name)
         {
             data = new DataTable();
@@ -364,6 +380,7 @@ namespace Game
 
         public static DataTable getItem(string item)
         {
+            Console.WriteLine(item);
             data = new DataTable();
             if (datastatus)
             {
@@ -376,6 +393,27 @@ namespace Game
                 connection.Close();
             }
             return data;
+        }
+
+        public static void saveItem(string name,string power,Color color,Image itemImg,string itemID)
+        {
+            Console.WriteLine(name);
+            Console.WriteLine(power);
+            Console.WriteLine(color);
+            Console.WriteLine(itemID);
+            if (datastatus)
+            {
+                connection.Open();
+
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO Game_Matches (player,zombie_kills,turrets_placed,wave,duration,damage_dealt) VALUES ((SELECT user_id FROM Game_Accounts WHERE username = @username),@kills,@turrets,@wave,@duration,@damage)", connection);
+                cmd.Parameters.AddWithValue("@name", name);
+                cmd.Parameters.AddWithValue("@power", power);
+                cmd.Parameters.AddWithValue("@color", $"{color.R},{color.G},{color.B}");
+                cmd.Parameters.AddWithValue("@damage", itemImg);
+                cmd.Parameters.AddWithValue("@turrets", itemID);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
         }
 
         public static DataTable getPlayerItems()

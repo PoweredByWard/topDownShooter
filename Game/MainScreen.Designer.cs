@@ -61,11 +61,14 @@
             this.pnlItem = new System.Windows.Forms.Panel();
             this.tbPower = new System.Windows.Forms.TrackBar();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.tbName = new System.Windows.Forms.TextBox();
             this.pbCancel = new System.Windows.Forms.PictureBox();
             this.pbSave = new System.Windows.Forms.PictureBox();
             this.pbItemPreview = new System.Windows.Forms.PictureBox();
             this.lblItem = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.pbColor = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
@@ -84,6 +87,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbColor)).BeginInit();
             this.SuspendLayout();
             // 
             // pbPlay
@@ -375,7 +379,7 @@
             // 
             // pbPlayerAdd
             // 
-            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 130);
+            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 127);
             this.pbPlayerAdd.Name = "pbPlayerAdd";
             this.pbPlayerAdd.Size = new System.Drawing.Size(91, 28);
             this.pbPlayerAdd.TabIndex = 5;
@@ -406,7 +410,7 @@
             this.label7.BackColor = System.Drawing.Color.Transparent;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(188, 137);
+            this.label7.Location = new System.Drawing.Point(188, 134);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(111, 24);
             this.label7.TabIndex = 3;
@@ -427,7 +431,7 @@
             // 
             this.tlpPlayer.ColumnCount = 1;
             this.tlpPlayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPlayer.Location = new System.Drawing.Point(41, 164);
+            this.tlpPlayer.Location = new System.Drawing.Point(41, 161);
             this.tlpPlayer.Name = "tlpPlayer";
             this.tlpPlayer.RowCount = 1;
             this.tlpPlayer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -462,9 +466,12 @@
             this.pnlItem.BackColor = System.Drawing.Color.Transparent;
             this.pnlItem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlItem.BackgroundImage")));
             this.pnlItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlItem.Controls.Add(this.pbColor);
+            this.pnlItem.Controls.Add(this.label10);
+            this.pnlItem.Controls.Add(this.label9);
             this.pnlItem.Controls.Add(this.tbPower);
             this.pnlItem.Controls.Add(this.label6);
-            this.pnlItem.Controls.Add(this.textBox1);
+            this.pnlItem.Controls.Add(this.tbName);
             this.pnlItem.Controls.Add(this.pbCancel);
             this.pnlItem.Controls.Add(this.pbSave);
             this.pnlItem.Controls.Add(this.pbItemPreview);
@@ -482,7 +489,6 @@
             this.tbPower.Name = "tbPower";
             this.tbPower.Size = new System.Drawing.Size(119, 45);
             this.tbPower.TabIndex = 9;
-            this.tbPower.Value = 1;
             // 
             // label6
             // 
@@ -495,19 +501,20 @@
             this.label6.TabIndex = 8;
             this.label6.Text = "Name:";
             // 
-            // textBox1
+            // tbName
             // 
-            this.textBox1.Location = new System.Drawing.Point(219, 198);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(116, 20);
-            this.textBox1.TabIndex = 7;
+            this.tbName.Location = new System.Drawing.Point(219, 198);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(116, 20);
+            this.tbName.TabIndex = 7;
             // 
             // pbCancel
             // 
             this.pbCancel.BackColor = System.Drawing.Color.Transparent;
             this.pbCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbCancel.BackgroundImage")));
             this.pbCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pbCancel.Location = new System.Drawing.Point(281, 391);
+            this.pbCancel.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbCancel.Location = new System.Drawing.Point(285, 391);
             this.pbCancel.Name = "pbCancel";
             this.pbCancel.Size = new System.Drawing.Size(172, 48);
             this.pbCancel.TabIndex = 6;
@@ -519,11 +526,13 @@
             this.pbSave.BackColor = System.Drawing.Color.Transparent;
             this.pbSave.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSave.BackgroundImage")));
             this.pbSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbSave.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbSave.Location = new System.Drawing.Point(41, 391);
             this.pbSave.Name = "pbSave";
             this.pbSave.Size = new System.Drawing.Size(172, 48);
             this.pbSave.TabIndex = 5;
             this.pbSave.TabStop = false;
+            this.pbSave.Click += new System.EventHandler(this.pbSave_Click);
             // 
             // pbItemPreview
             // 
@@ -552,6 +561,39 @@
             this.lblItem.Text = "ADD ITEM";
             this.lblItem.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(160, 232);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(55, 16);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Power:";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.ForeColor = System.Drawing.Color.White;
+            this.label10.Location = new System.Drawing.Point(158, 285);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(49, 16);
+            this.label10.TabIndex = 11;
+            this.label10.Text = "Color:";
+            // 
+            // pbColor
+            // 
+            this.pbColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.pbColor.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbColor.Location = new System.Drawing.Point(219, 283);
+            this.pbColor.Name = "pbColor";
+            this.pbColor.Size = new System.Drawing.Size(116, 30);
+            this.pbColor.TabIndex = 12;
+            this.pbColor.TabStop = false;
+            this.pbColor.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -567,10 +609,10 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
-            this.Controls.Add(this.pnlItem);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -602,6 +644,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbColor)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -644,7 +687,10 @@
         private System.Windows.Forms.PictureBox pbSave;
         private System.Windows.Forms.TrackBar tbPower;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.PictureBox pbCancel;
+        private System.Windows.Forms.PictureBox pbColor;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label9;
     }
 }
