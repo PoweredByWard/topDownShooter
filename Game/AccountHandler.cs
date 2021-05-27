@@ -9,11 +9,6 @@ namespace Game
     static class AccountHandler
     {
         static string username;
-        static AccountHandler()
-        {
-            
-        }
-
         public static string getUsername() {
             return username;
         }

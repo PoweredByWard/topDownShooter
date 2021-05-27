@@ -371,6 +371,7 @@
             this.pbGunAdd.Size = new System.Drawing.Size(91, 28);
             this.pbGunAdd.TabIndex = 6;
             this.pbGunAdd.TabStop = false;
+            this.pbGunAdd.Click += new System.EventHandler(this.pbGunAdd_Click);
             // 
             // pbPlayerAdd
             // 
@@ -379,7 +380,7 @@
             this.pbPlayerAdd.Size = new System.Drawing.Size(91, 28);
             this.pbPlayerAdd.TabIndex = 5;
             this.pbPlayerAdd.TabStop = false;
-            this.pbPlayerAdd.Click += new System.EventHandler(this.showPanelItem);
+            this.pbPlayerAdd.Click += new System.EventHandler(this.pbPlayerAdd_Click);
             // 
             // label8
             // 
@@ -566,10 +567,10 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
+            this.Controls.Add(this.pnlItem);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -168,7 +169,6 @@ namespace Game
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
-
                     sb.Append(bytes[i].ToString("x2"));
                 }
                 return sb.ToString();
@@ -188,6 +188,24 @@ namespace Game
                 connection.Close();
             }
             return data;
+        }
+
+        public static Size getTypeSizeByName(string name)
+        {
+            data = new DataTable();
+            Size size = new Size(0,0);
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT size FROM Game_ItemTypes WHERE name = @name", connection);
+                cmd.Parameters.AddWithValue("@name", name);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                string sizeString = data.Rows[0][0].ToString();
+                size = new Size(int.Parse(sizeString.Split(',')[0]), int.Parse(sizeString.Split(',')[1]));
+            }
+            return size;
         }
 
         public static DataTable findUser(string searchValue)
@@ -337,6 +355,22 @@ namespace Game
                 
                 MySqlCommand cmd = new MySqlCommand(type==null? "SELECT *  FROM Game_Items ORDER BY price" : "SELECT *  FROM Game_Items WHERE type = @type ORDER BY price", connection);
                 if (type!=null)cmd.Parameters.AddWithValue("@type",type);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static DataTable getItem(string item)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_Items WHERE item_id = @item", connection);
+                cmd.Parameters.AddWithValue("@item", item);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
                 connection.Close();

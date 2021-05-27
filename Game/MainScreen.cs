@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,8 @@ namespace Game
     {
         List<Panel> tabs;
         string account;
+        string previewType;
+        string previewItem;
         public MainScreen()
         {
             InitializeComponent();
@@ -382,8 +385,10 @@ namespace Game
             else MessageBox.Show($"Couldn't reset {account}'s account.");
         }
 
-        private void showPanelItem(object sender, EventArgs e)
+        private void showPanelItem(string type, string item = null)
         {
+            previewType = type;
+            previewItem = item;
             foreach (Panel pnl in tabs)
             {
                 if (pnl.Name != "pnlItem")
@@ -400,6 +405,16 @@ namespace Game
 
         private void pbItemPreview_Click(object sender, EventArgs e)
         {
+            DataTable itemtbl = new DataTable();
+            if (previewItem!=null)
+            {
+                itemtbl = DataHandler.getItem(previewItem);
+
+                byte[] imageBytes = (byte[])itemtbl.Rows[0][6];
+                MemoryStream buf = new MemoryStream(imageBytes);
+                Image img = Image.FromStream(buf, true);
+                pbItemPreview.BackgroundImage = Image.FromStream(buf, true);
+            }
             OpenFileDialog Dialog = new OpenFileDialog
             {
                 CheckFileExists = true,
@@ -408,12 +423,17 @@ namespace Game
                 Filter = "Image Files|*.jpg;*.jpeg;*.png;",
             };
 
+            Image item;
+            Size imageSize = DataHandler.getTypeSizeByName(previewType);
             if (Dialog.ShowDialog() == DialogResult.OK)
             {
-                Console.WriteLine(Dialog.FileName);
+                item = new Bitmap(Image.FromFile(Dialog.FileName),imageSize);
+                pbItemPreview.BackgroundImage = item;
             }
         }
 
+        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem("Player");
+        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem("Gun");
     }
 }
 
