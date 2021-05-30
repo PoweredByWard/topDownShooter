@@ -35,7 +35,7 @@ namespace Game
             abilities.Add(item.getAbility());
             abilitiePrices.Add(item.getPrice());
 
-            coins = 90000;
+            coins = 1000;
         }
 
 

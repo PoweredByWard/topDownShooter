@@ -61,18 +61,7 @@ namespace Game
 
         private void showProfile(string username = null)
         {
-
-            foreach (Panel pnl in tabs)
-            {
-                if (pnl.Name != "pnlProfile")
-                {
-                    pnl.Visible = false;
-                }
-                else
-                {
-                    pnl.Visible = true;
-                }
-            }
+            showPnl("pnlProfile");
             account = username == null ? AccountHandler.getUsername() : username;
 
             lblProfileTitle.Text = account != AccountHandler.getUsername() ? $"{account}'s Profile" : "Your profile";
@@ -124,17 +113,7 @@ namespace Game
 
         private void showLeaderboard()
         {
-            foreach (Panel pnl in tabs)
-            {
-                if (pnl.Name != "pnlScoreboard")
-                {
-                    pnl.Visible = false;
-                }
-                else
-                {
-                    pnl.Visible = true;
-                }
-            }
+            showPnl("pnlScoreboard");
             DataTable tbl = DataHandler.getTop(10);
             tlpScoreboard.Controls.Clear();
             tlpScoreboard.RowCount = 0;
@@ -159,17 +138,19 @@ namespace Game
 
         private void showInventory()
         {
-            foreach (Panel pnl in tabs)
+            showPnl("pnlInventory");
+
+            if (DataHandler.isAdmin())
             {
-                if (pnl.Name != "pnlInventory")
-                {
-                    pnl.Visible = false;
-                }
-                else
-                {
-                    pnl.Visible = true;
-                }
+                pbPlayerAdd.Show();
+                pbGunAdd.Show();
             }
+            else
+            {
+                pbPlayerAdd.Hide();
+                pbGunAdd.Hide();
+            }
+
             DataTable types = DataHandler.getItemTypes();
             DataTable playerItemsData = DataHandler.getPlayerItems();
             List<string> playerItems = getPlayerItems(playerItemsData);
@@ -201,7 +182,9 @@ namespace Game
                         bool owned = playerItems.Contains(items.Rows[i][0].ToString());
                         bool equipped = owned ? (bool.Parse(playerItemsData.Rows[playerItems.IndexOf(items.Rows[i][0].ToString())][3].ToString())) : false;
                         Image button = owned ? (equipped ? Image.FromFile("GUI/save.png") : Image.FromFile("GUI/save.png")) : Image.FromFile("GUI/scoreboard.png");
-                        Label lblButton = new Label { Name = $"lbl{items.Rows[i][0]}", Text = owned ? (equipped ? "Equipped" : "Equip") : $"{items.Rows[i][4]} coins", Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
+
+                        string text = items.Rows[i][4].ToString() == "0" ? "Free" : $"{items.Rows[i][4].ToString()} coins";
+                        Label lblButton = new Label { Name = $"lbl{items.Rows[i][0]}", Text = owned ? (equipped ? "Equipped" : "Equip") : text, Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
 
                         lblButton.Click += new EventHandler(itemClick);
                         tlpGun.Controls.Add(createInventoryItem(items.Rows[i]), i, 0);
@@ -224,7 +207,9 @@ namespace Game
                         bool owned = playerItems.Contains(items.Rows[i][0].ToString());
                         bool equipped = owned ? (bool.Parse(playerItemsData.Rows[playerItems.IndexOf(items.Rows[i][0].ToString())][3].ToString())) : false;
                         Image button = owned ? (equipped ? Image.FromFile("GUI/save.png"): Image.FromFile("GUI/save.png")) : Image.FromFile("GUI/scoreboard.png");
-                        Label lblButton = new Label { Name = $"lbl{items.Rows[i][0]}", Text = owned ? (equipped? "Equipped" : "Equip") : $"{items.Rows[i][4]} coins", Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
+
+                        string text = items.Rows[i][4].ToString() == "0" ? "Free" : $"{items.Rows[i][4].ToString()} coins";
+                        Label lblButton = new Label { Name = $"lbl{items.Rows[i][0]}", Text = owned ? (equipped? "Equipped" : "Equip") : text, Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
                         
                         lblButton.Click += new EventHandler(itemClick);
                         tlpPlayer.Controls.Add(createInventoryItem(items.Rows[i]), i, 0);
@@ -293,9 +278,11 @@ namespace Game
             inventoryItem.BackgroundImage = Image.FromFile(item[2].ToString());
             inventoryItem.Name = $"pnl{item[0]}";
             inventoryItem.BackgroundImageLayout = ImageLayout.Center;
-            inventoryItem.Cursor = Cursors.Hand;
-
-            inventoryItem.Click += new EventHandler(showItem);
+            if (DataHandler.isAdmin()) 
+            {
+                inventoryItem.Cursor = Cursors.Hand;
+                inventoryItem.Click += new EventHandler(showItem);
+            }
 
             return inventoryItem;
         }
@@ -366,6 +353,21 @@ namespace Game
         private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
         private void pbCancel_Click(object sender, EventArgs e) => showInventory();
 
+        private void showPnl(string name)
+        {
+            foreach (Panel pnl in tabs)
+            {
+                if (pnl.Name != name)
+                {
+                    pnl.Hide();
+                }
+                else
+                {
+                    pnl.Show();
+                }
+            }
+        }
+
         private void delete_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
@@ -396,23 +398,16 @@ namespace Game
             previewType = type;
             Console.WriteLine(type);
             if (previewType != null)previewItem = null;
-            foreach (Panel pnl in tabs)
-            {
-                if (pnl.Name != "pnlItem")
-                {
-                    pnl.Visible = false;
-                }
-                else
-                {
-                    pnl.Visible = true;
-                }
-            }
+            showPnl("pnlItem");
             Console.WriteLine(previewType);
             tbPower.Maximum = 2;
             if (previewItem != null)
             {
+                
+                pbDeleteItem.Show();
                 DataTable itemtbl = DataHandler.getItem(previewItem);
 
+                lblItem.Text = $"Edit {itemtbl.Rows[0][1]}";
                 byte[] imageBytes = (byte[])itemtbl.Rows[0][6];
                 MemoryStream buf = new MemoryStream(imageBytes);
                 pbItemPreview.BackgroundImage = Image.FromStream(buf, true);
@@ -420,6 +415,19 @@ namespace Game
                 tbName.Text = itemtbl.Rows[0][1].ToString();
                 tbPrice.Text = itemtbl.Rows[0][4].ToString();
                 oldPrice = itemtbl.Rows[0][4].ToString();
+                Console.WriteLine(itemtbl.Rows[0][8].ToString());
+                if (itemtbl.Rows[0][8].ToString()=="False")
+                {
+                    cbDefault.Checked = false;
+                    cbDefault.Enabled = true;
+                    pbDeleteItem.Show();
+                }
+                else
+                {
+                    cbDefault.Checked = true;
+                    cbDefault.Enabled = false;
+                    pbDeleteItem.Hide();
+                }
 
                 tbPower.Value = int.Parse(itemtbl.Rows[0][7].ToString());
 
@@ -432,13 +440,18 @@ namespace Game
             }
             else
             {
-                Console.WriteLine(previewType);
+                pbItemPreview.BackgroundImage = Image.FromFile("GUI/plus.png");
+                DataTable typetbl = DataHandler.getType(previewType);
+                lblItem.Text = $"Add {typetbl.Rows[0][1]} skin";
+                pbColor.BackColor = Color.FromArgb(224, 224, 224);
+                cbDefault.Checked = false;
+                cbDefault.Enabled = true;
+                pbDeleteItem.Hide();
                 pbColor.BackColor = Color.Transparent;
                 pbItemPreview.BackColor = Color.Transparent;
                 tbName.Clear();
                 tbPrice.Clear();
                 tbPower.Value = 0;
-                pbItemPreview.BackgroundImage = null;
             }
         }
 
@@ -484,7 +497,9 @@ namespace Game
                 return;
             }
 
-            DataHandler.saveItem(tbName.Text,tbPower.Value.ToString(),pbColor.BackColor, pbItemPreview.BackgroundImage, tbPrice.Text, previewItem,previewType);
+            DataHandler.saveItem(tbName.Text,tbPower.Value.ToString(),pbColor.BackColor, pbItemPreview.BackgroundImage, tbPrice.Text, cbDefault.Checked, previewItem,previewType);
+            ResourceHandler.checkResources();
+            showInventory();
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -521,7 +536,14 @@ namespace Game
             try
             {
                 int.Parse(text);
-                oldPrice = text;
+                if (!text.Contains("-") && !text.Contains(".") && !text.Contains(","))
+                {
+                    oldPrice = text;
+                }
+                else
+                {
+                    txt.Text = oldPrice;
+                }
             }
             catch (Exception)
             {
@@ -530,6 +552,19 @@ namespace Game
                 txt.SelectionStart = focus-1;
                 txt.SelectionLength = 0;
             }
+        }
+
+        private void pictureBox2_Click_1(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete this item?", "Confirmation", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No) return;
+            bool deleted = DataHandler.deleteItem(previewItem);
+            if (deleted)
+            {
+                MessageBox.Show($"Item got deleted.");
+                showProfile();
+            }
+            else MessageBox.Show($"Couldn't delete this Item.");
         }
     }
 }

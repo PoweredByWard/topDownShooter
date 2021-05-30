@@ -105,15 +105,5 @@ namespace Game
         {
             openMenu();
         }
-
-        private void hoverIn(object sender, System.EventArgs e)
-        {
-            this.Cursor = Cursors.Hand;
-        }
-
-        private void hoverOut(object sender, System.EventArgs e)
-        {
-            this.Cursor = Cursors.Default;
-        }
     }
 }

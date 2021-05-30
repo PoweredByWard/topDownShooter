@@ -288,11 +288,12 @@ namespace Game
             }
         }
 
-        public static bool isAdmin(string username)
+        public static bool isAdmin(string username = null)
         {
             data = new DataTable();
             if (datastatus)
             {
+                if (username == null) username = AccountHandler.getUsername();
                 connection.Open();
                 MySqlCommand cmd = new MySqlCommand("SELECT admin FROM Game_Accounts  WHERE username =  @username AND admin = 1", connection);
                 cmd.Parameters.AddWithValue("@username", username);
@@ -317,7 +318,21 @@ namespace Game
             }
             return false;
         }
-        
+
+        public static bool deleteItem(string item)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM Game_Items WHERE item_id = @item AND default = 0 ", connection);
+                cmd.Parameters.AddWithValue("@item", item);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return true;
+            }
+            return false;
+        }
+
         public static bool resetAccount(string username)
         {
             if (datastatus)
@@ -429,7 +444,7 @@ namespace Game
             return data;
         }
 
-        public static void saveItem(string name,string power,Color color,Image itemImg,string price,string itemID,string typeID)
+        public static void saveItem(string name, string power, Color color, Image itemImg, string price, bool isDefault, string itemID,string typeID)
         {
             if (datastatus)
             {
@@ -444,6 +459,16 @@ namespace Game
                 MySqlCommand cmd;
                 DataTable item;
                 DataTable type;
+                if (isDefault)
+                {
+                    item = getItem(itemID);
+                    type = getType(item.Rows[0][3].ToString());
+                    cmd = new MySqlCommand("UPDATE Game_Items SET is_default = 0 WHERE type = @type", connection);
+                    cmd.Parameters.AddWithValue("@type", type.Rows[0][0]);
+                    connection.Open();
+                    cmd.ExecuteNonQuery();
+                    connection.Close();
+                }
                 if (itemID == null) 
                 {
                     type = getType(typeID);
@@ -455,7 +480,7 @@ namespace Game
                 {
                     item = getItem(itemID);
                     type = getType(item.Rows[0][3].ToString());
-                    cmd = new MySqlCommand("UPDATE Game_Items SET name = @name, source = @source, price = @price, power = @power, color = @color, image = @image WHERE item_id = @itemid", connection);
+                    cmd = new MySqlCommand("UPDATE Game_Items SET name = @name, source = @source, price = @price, power = @power, color = @color, image = @image, is_default = @default WHERE item_id = @itemid", connection);
                     cmd.Parameters.AddWithValue("@itemid", itemID);
                 }
                 connection.Open();
@@ -465,6 +490,7 @@ namespace Game
                 cmd.Parameters.AddWithValue("@power", power);
                 cmd.Parameters.AddWithValue("@color", $"{color.R},{color.G},{color.B}");
                 cmd.Parameters.AddWithValue("@image", img);
+                cmd.Parameters.AddWithValue("@default", isDefault?"1":"0");
                 cmd.ExecuteNonQuery();
                 connection.Close();
             }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,7 +21,14 @@ namespace Game
                 byte[] imageBytes = (byte[])tbl.Rows[i][6];
                 MemoryStream buf = new MemoryStream(imageBytes);
                 Image img = Image.FromStream(buf, true);
-                img.Save($"{Environment.CurrentDirectory}\\{tbl.Rows[i][2].ToString().Replace("/","\\")}");
+                try
+                {
+                    img.Save($"{Environment.CurrentDirectory}\\{tbl.Rows[i][2].ToString().Replace("/", "\\")}");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }

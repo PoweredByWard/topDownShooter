@@ -59,6 +59,11 @@
             this.pbCoin = new System.Windows.Forms.PictureBox();
             this.lblCoin = new System.Windows.Forms.Label();
             this.pnlItem = new System.Windows.Forms.Panel();
+            this.cbDefault = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.pbDeleteItem = new System.Windows.Forms.PictureBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.tbPrice = new System.Windows.Forms.TextBox();
             this.pbColor = new System.Windows.Forms.PictureBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
@@ -69,8 +74,6 @@
             this.pbSave = new System.Windows.Forms.PictureBox();
             this.pbItemPreview = new System.Windows.Forms.PictureBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.tbPrice = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
@@ -85,6 +88,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbPlayerAdd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCoin)).BeginInit();
             this.pnlItem.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDeleteItem)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbPower)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).BeginInit();
@@ -372,18 +376,24 @@
             // 
             // pbGunAdd
             // 
-            this.pbGunAdd.Location = new System.Drawing.Point(301, 290);
+            this.pbGunAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGunAdd.BackgroundImage")));
+            this.pbGunAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbGunAdd.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbGunAdd.Location = new System.Drawing.Point(301, 285);
             this.pbGunAdd.Name = "pbGunAdd";
-            this.pbGunAdd.Size = new System.Drawing.Size(91, 28);
+            this.pbGunAdd.Size = new System.Drawing.Size(112, 30);
             this.pbGunAdd.TabIndex = 6;
             this.pbGunAdd.TabStop = false;
             this.pbGunAdd.Click += new System.EventHandler(this.pbGunAdd_Click);
             // 
             // pbPlayerAdd
             // 
-            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 134);
+            this.pbPlayerAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbPlayerAdd.BackgroundImage")));
+            this.pbPlayerAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbPlayerAdd.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 130);
             this.pbPlayerAdd.Name = "pbPlayerAdd";
-            this.pbPlayerAdd.Size = new System.Drawing.Size(91, 28);
+            this.pbPlayerAdd.Size = new System.Drawing.Size(112, 30);
             this.pbPlayerAdd.TabIndex = 5;
             this.pbPlayerAdd.TabStop = false;
             this.pbPlayerAdd.Click += new System.EventHandler(this.pbPlayerAdd_Click);
@@ -468,6 +478,9 @@
             this.pnlItem.BackColor = System.Drawing.Color.Transparent;
             this.pnlItem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlItem.BackgroundImage")));
             this.pnlItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlItem.Controls.Add(this.cbDefault);
+            this.pnlItem.Controls.Add(this.label12);
+            this.pnlItem.Controls.Add(this.pbDeleteItem);
             this.pnlItem.Controls.Add(this.label11);
             this.pnlItem.Controls.Add(this.tbPrice);
             this.pnlItem.Controls.Add(this.pbColor);
@@ -485,8 +498,62 @@
             this.pnlItem.Size = new System.Drawing.Size(493, 474);
             this.pnlItem.TabIndex = 10;
             // 
+            // cbDefault
+            // 
+            this.cbDefault.AutoSize = true;
+            this.cbDefault.Location = new System.Drawing.Point(219, 347);
+            this.cbDefault.Name = "cbDefault";
+            this.cbDefault.Size = new System.Drawing.Size(15, 14);
+            this.cbDefault.TabIndex = 18;
+            this.cbDefault.UseVisualStyleBackColor = true;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.ForeColor = System.Drawing.Color.White;
+            this.label12.Location = new System.Drawing.Point(146, 345);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(61, 16);
+            this.label12.TabIndex = 17;
+            this.label12.Text = "Default:";
+            // 
+            // pbDeleteItem
+            // 
+            this.pbDeleteItem.BackColor = System.Drawing.Color.Transparent;
+            this.pbDeleteItem.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbDeleteItem.BackgroundImage")));
+            this.pbDeleteItem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbDeleteItem.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbDeleteItem.Location = new System.Drawing.Point(325, 401);
+            this.pbDeleteItem.Name = "pbDeleteItem";
+            this.pbDeleteItem.Size = new System.Drawing.Size(138, 38);
+            this.pbDeleteItem.TabIndex = 15;
+            this.pbDeleteItem.TabStop = false;
+            this.pbDeleteItem.Visible = false;
+            this.pbDeleteItem.Click += new System.EventHandler(this.pictureBox2_Click_1);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.ForeColor = System.Drawing.Color.White;
+            this.label11.Location = new System.Drawing.Point(159, 228);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(48, 16);
+            this.label11.TabIndex = 14;
+            this.label11.Text = "Price:";
+            // 
+            // tbPrice
+            // 
+            this.tbPrice.Location = new System.Drawing.Point(218, 227);
+            this.tbPrice.Name = "tbPrice";
+            this.tbPrice.Size = new System.Drawing.Size(116, 20);
+            this.tbPrice.TabIndex = 13;
+            this.tbPrice.TextChanged += new System.EventHandler(this.tbPrice_TextChanged);
+            // 
             // pbColor
             // 
+            this.pbColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.pbColor.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbColor.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbColor.Location = new System.Drawing.Point(219, 310);
@@ -512,7 +579,7 @@
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(160, 259);
+            this.label9.Location = new System.Drawing.Point(152, 259);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(55, 16);
             this.label9.TabIndex = 10;
@@ -532,7 +599,7 @@
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(160, 199);
+            this.label6.Location = new System.Drawing.Point(154, 196);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 16);
             this.label6.TabIndex = 8;
@@ -551,9 +618,9 @@
             this.pbCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbCancel.BackgroundImage")));
             this.pbCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbCancel.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbCancel.Location = new System.Drawing.Point(285, 391);
+            this.pbCancel.Location = new System.Drawing.Point(180, 401);
             this.pbCancel.Name = "pbCancel";
-            this.pbCancel.Size = new System.Drawing.Size(172, 48);
+            this.pbCancel.Size = new System.Drawing.Size(138, 38);
             this.pbCancel.TabIndex = 6;
             this.pbCancel.TabStop = false;
             this.pbCancel.Click += new System.EventHandler(this.pbCancel_Click);
@@ -564,20 +631,21 @@
             this.pbSave.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSave.BackgroundImage")));
             this.pbSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbSave.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbSave.Location = new System.Drawing.Point(41, 391);
+            this.pbSave.Location = new System.Drawing.Point(30, 401);
             this.pbSave.Name = "pbSave";
-            this.pbSave.Size = new System.Drawing.Size(172, 48);
+            this.pbSave.Size = new System.Drawing.Size(138, 38);
             this.pbSave.TabIndex = 5;
             this.pbSave.TabStop = false;
             this.pbSave.Click += new System.EventHandler(this.pbSave_Click);
             // 
             // pbItemPreview
             // 
+            this.pbItemPreview.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbItemPreview.BackgroundImage")));
             this.pbItemPreview.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbItemPreview.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbItemPreview.Location = new System.Drawing.Point(41, 196);
             this.pbItemPreview.Name = "pbItemPreview";
-            this.pbItemPreview.Size = new System.Drawing.Size(100, 84);
+            this.pbItemPreview.Size = new System.Drawing.Size(100, 100);
             this.pbItemPreview.TabIndex = 4;
             this.pbItemPreview.TabStop = false;
             this.pbItemPreview.Click += new System.EventHandler(this.pbItemPreview_Click);
@@ -593,29 +661,10 @@
             this.lblItem.ForeColor = System.Drawing.Color.White;
             this.lblItem.Location = new System.Drawing.Point(174, 148);
             this.lblItem.Name = "lblItem";
-            this.lblItem.Size = new System.Drawing.Size(152, 31);
+            this.lblItem.Size = new System.Drawing.Size(128, 31);
             this.lblItem.TabIndex = 3;
-            this.lblItem.Text = "ADD ITEM";
+            this.lblItem.Text = "Add item";
             this.lblItem.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.ForeColor = System.Drawing.Color.White;
-            this.label11.Location = new System.Drawing.Point(159, 228);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(48, 16);
-            this.label11.TabIndex = 14;
-            this.label11.Text = "Price:";
-            // 
-            // tbPrice
-            // 
-            this.tbPrice.Location = new System.Drawing.Point(218, 227);
-            this.tbPrice.Name = "tbPrice";
-            this.tbPrice.Size = new System.Drawing.Size(116, 20);
-            this.tbPrice.TabIndex = 13;
-            this.tbPrice.TextChanged += new System.EventHandler(this.tbPrice_TextChanged);
             // 
             // MainScreen
             // 
@@ -663,6 +712,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCoin)).EndInit();
             this.pnlItem.ResumeLayout(false);
             this.pnlItem.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbDeleteItem)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tbPower)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).EndInit();
@@ -717,5 +767,8 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.TextBox tbPrice;
+        private System.Windows.Forms.PictureBox pbDeleteItem;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox cbDefault;
     }
 }

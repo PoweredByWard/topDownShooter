@@ -45,28 +45,26 @@
             this.pbSave.BackColor = System.Drawing.Color.Transparent;
             this.pbSave.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSave.BackgroundImage")));
             this.pbSave.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbSave.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbSave.Location = new System.Drawing.Point(30, 410);
             this.pbSave.Name = "pbSave";
             this.pbSave.Size = new System.Drawing.Size(172, 48);
             this.pbSave.TabIndex = 0;
             this.pbSave.TabStop = false;
             this.pbSave.Click += new System.EventHandler(this.pbSave_Click);
-            this.pbSave.MouseEnter += new System.EventHandler(this.hoverIn);
-            this.pbSave.MouseLeave += new System.EventHandler(this.hoverOut);
             // 
             // pbCancel
             // 
             this.pbCancel.BackColor = System.Drawing.Color.Transparent;
             this.pbCancel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbCancel.BackgroundImage")));
             this.pbCancel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbCancel.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pbCancel.Location = new System.Drawing.Point(234, 410);
             this.pbCancel.Name = "pbCancel";
             this.pbCancel.Size = new System.Drawing.Size(172, 48);
             this.pbCancel.TabIndex = 1;
             this.pbCancel.TabStop = false;
             this.pbCancel.Click += new System.EventHandler(this.pbCancel_Click);
-            this.pbCancel.MouseEnter += new System.EventHandler(this.hoverIn);
-            this.pbCancel.MouseLeave += new System.EventHandler(this.hoverOut);
             // 
             // label1
             // 
