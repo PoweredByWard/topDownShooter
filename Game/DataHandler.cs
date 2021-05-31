@@ -47,7 +47,7 @@ namespace Game
                 MySqlParameter pmblobnick = new MySqlParameter();
                 pmblobnick.ParameterName = "@username";
                 pmblobnick.Value = username;
-                MySqlCommand sqlcm = new MySqlCommand("SELECT * FROM Game_Accounts WHERE username = @username", connection);
+                MySqlCommand sqlcm = new MySqlCommand("SELECT * FROM EX2_Accounts WHERE username = @username", connection);
                 sqlcm.Parameters.Add(pmblobnick);
                 daGegevens = new MySqlDataAdapter(sqlcm);
                 daGegevens.Fill(data);
@@ -67,7 +67,7 @@ namespace Game
                 string hash = gethash(password);
                 connection.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM Game_Accounts WHERE username = @username AND hash = @hash", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM EX2_Accounts WHERE username = @username AND hash = @hash", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@hash", hash);
                 daGegevens = new MySqlDataAdapter(cmd);
@@ -82,7 +82,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT * FROM Game_Accounts WHERE username = @username", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM EX2_Accounts WHERE username = @username", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -95,15 +95,38 @@ namespace Game
 
                 string hash = gethash(password);
 
-                cmd = new MySqlCommand("INSERT INTO Game_Accounts (username,password,hash) VALUES (@username,@password,@hash)", connection);
+                cmd = new MySqlCommand("INSERT INTO EX2_Accounts (username,password,hash) VALUES (@username,@password,@hash)", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.Parameters.AddWithValue("@password", password);
                 cmd.Parameters.AddWithValue("@hash", hash);
                 cmd.ExecuteNonQuery();
                 connection.Close();
+
+                createUserDefaultSettings(username);
+
                 return true;
+
             }
             return false;
+        }
+
+        public static void createUserDefaultSettings(string username)
+        {
+            DataTable controls = getControls();
+
+            for (int i = 0; i < controls.Rows.Count; i++)
+            {
+                createUserControl(controls.Rows[i][0].ToString(), username);
+            }
+        }
+
+        public static void updateUser(string username = null)
+        {
+            if (username == null) username = AccountHandler.getUsername();
+            MySqlCommand cmd = new MySqlCommand("UPDATE EX2_Accounts SET last_update = NOW() WHERE username = @username", connection);
+            cmd.Parameters.AddWithValue("@username", username);
+            cmd.ExecuteNonQuery();
+            connection.Close();
         }
 
         public static string gethash(string password)
@@ -183,7 +206,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM Game_Matches M, Game_Accounts A  WHERE M.player = A.user_id ORDER BY M.zombie_kills DESC LIMIT @amount", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM EX2_Matches M, EX2_Accounts A  WHERE M.player = A.user_id ORDER BY M.zombie_kills DESC LIMIT @amount", connection);
                 cmd.Parameters.AddWithValue("@amount", amount);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -198,7 +221,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT type FROM Game_Items WHERE item_id = @item", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT type FROM EX2_Items WHERE item_id = @item", connection);
                 cmd.Parameters.AddWithValue("@item", item);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -215,7 +238,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT size FROM Game_ItemTypes WHERE type_id = @type", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT size FROM EX2_ItemTypes WHERE type_id = @type", connection);
                 cmd.Parameters.AddWithValue("@type", type);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -232,7 +255,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT username  FROM Game_Accounts WHERE username LIKE CONCAT('%', @search, '%') LIMIT 5", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT username  FROM EX2_Accounts WHERE username LIKE CONCAT('%', @search, '%') LIMIT 5", connection);
                 cmd.Parameters.AddWithValue("@search", searchValue);
                 Console.WriteLine(searchValue);
                 daGegevens = new MySqlDataAdapter(cmd);
@@ -249,7 +272,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT SUM(zombie_kills),SUM(turrets_placed),SUM(wave),SEC_TO_TIME(SUM(TIME_TO_SEC(duration))),SUM(damage_dealt)  FROM Game_Matches  WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username)", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT SUM(zombie_kills),SUM(turrets_placed),SUM(wave),SEC_TO_TIME(SUM(TIME_TO_SEC(duration))),SUM(damage_dealt)  FROM EX2_Matches  WHERE player = (SELECT user_id FROM EX2_Accounts WHERE username = @username)", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -265,7 +288,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT coins  FROM Game_Accounts  WHERE username =  @username", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT coins  FROM EX2_Accounts  WHERE username =  @username", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -280,7 +303,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("UPDATE Game_Accounts SET coins = @coins WHERE username = @username", connection);
+                MySqlCommand cmd = new MySqlCommand("UPDATE EX2_Accounts SET coins = @coins WHERE username = @username", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 cmd.Parameters.AddWithValue("@coins", coins);
                 cmd.ExecuteNonQuery();
@@ -295,7 +318,7 @@ namespace Game
             {
                 if (username == null) username = AccountHandler.getUsername();
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT admin FROM Game_Accounts  WHERE username =  @username AND admin = 1", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT admin FROM EX2_Accounts  WHERE username =  @username AND admin = 1", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -310,7 +333,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM Game_Accounts WHERE username = @username AND admin = 0", connection);
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM EX2_Accounts WHERE username = @username AND admin = 0", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.ExecuteNonQuery();
                 connection.Close();
@@ -324,7 +347,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM Game_Items WHERE item_id = @item AND default = 0 ", connection);
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM EX2_Items WHERE item_id = @item AND default = 0 ", connection);
                 cmd.Parameters.AddWithValue("@item", item);
                 cmd.ExecuteNonQuery();
                 connection.Close();
@@ -338,10 +361,11 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("DELETE FROM Game_Matches WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username); UPDATE Game_Accounts SET coins = 0 WHERE username = @username; DELETE FROM Game_Inventory WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND item IN (SELECT item_id FROM Game_Items WHERE price !=0)", connection);
+                MySqlCommand cmd = new MySqlCommand("DELETE FROM EX2_Matches WHERE player = (SELECT user_id FROM EX2_Accounts WHERE username = @username); UPDATE EX2_Accounts SET coins = 0 WHERE username = @username; DELETE FROM EX2_Inventory WHERE player = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND item IN (SELECT item_id FROM EX2_Items WHERE price !=0)", connection);
                 cmd.Parameters.AddWithValue("@username", username);
                 cmd.ExecuteNonQuery();
                 connection.Close();
+                updateUser(username);
                 return true;
             }
             return false;
@@ -353,7 +377,7 @@ namespace Game
             {
                 connection.Open();
 
-                MySqlCommand cmd = new MySqlCommand("INSERT INTO Game_Matches (player,zombie_kills,turrets_placed,wave,duration,damage_dealt) VALUES ((SELECT user_id FROM Game_Accounts WHERE username = @username),@kills,@turrets,@wave,@duration,@damage)", connection);
+                MySqlCommand cmd = new MySqlCommand("INSERT INTO EX2_Matches (player,zombie_kills,turrets_placed,wave,duration,damage_dealt) VALUES ((SELECT user_id FROM EX2_Accounts WHERE username = @username),@kills,@turrets,@wave,@duration,@damage)", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 cmd.Parameters.AddWithValue("@wave", wave);
                 cmd.Parameters.AddWithValue("@kills", kills);
@@ -371,7 +395,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_ItemTypes", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM EX2_ItemTypes", connection);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
                 connection.Close();
@@ -386,7 +410,7 @@ namespace Game
             {
                 connection.Open();
                 
-                MySqlCommand cmd = new MySqlCommand(type==null? "SELECT *  FROM Game_Items ORDER BY price" : "SELECT *  FROM Game_Items WHERE type = @type ORDER BY price", connection);
+                MySqlCommand cmd = new MySqlCommand(type==null? "SELECT *  FROM EX2_Items ORDER BY price" : "SELECT *  FROM EX2_Items WHERE type = @type ORDER BY price", connection);
                 if (type!=null)cmd.Parameters.AddWithValue("@type",type);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -402,7 +426,7 @@ namespace Game
             {
                 connection.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_Items WHERE item_id = @item", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM EX2_Items WHERE item_id = @item", connection);
                 cmd.Parameters.AddWithValue("@item", item);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -418,7 +442,7 @@ namespace Game
             {
                 connection.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT type_id  FROM Game_ItemTypes WHERE name = @itemname", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT type_id  FROM EX2_ItemTypes WHERE name = @itemname", connection);
                 cmd.Parameters.AddWithValue("@itemname", name);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -435,7 +459,7 @@ namespace Game
             {
                 connection.Open();
 
-                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_ItemTypes WHERE type_id = @type", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM EX2_ItemTypes WHERE type_id = @type", connection);
                 cmd.Parameters.AddWithValue("@type", type);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -463,7 +487,7 @@ namespace Game
                 {
                     item = getItem(itemID);
                     type = getType(item.Rows[0][3].ToString());
-                    cmd = new MySqlCommand("UPDATE Game_Items SET is_default = 0 WHERE type = @type", connection);
+                    cmd = new MySqlCommand("UPDATE EX2_Items SET is_default = 0 WHERE type = @type", connection);
                     cmd.Parameters.AddWithValue("@type", type.Rows[0][0]);
                     connection.Open();
                     cmd.ExecuteNonQuery();
@@ -472,7 +496,7 @@ namespace Game
                 if (itemID == null) 
                 {
                     type = getType(typeID);
-                    cmd = new MySqlCommand("INSERT INTO Game_Items (name,source,type,price,color,image,power) VALUES (@name,@source,@type,@price,@color,@image,@power)", connection);
+                    cmd = new MySqlCommand("INSERT INTO EX2_Items (name,source,type,price,color,image,power) VALUES (@name,@source,@type,@price,@color,@image,@power)", connection);
                     cmd.Parameters.AddWithValue("@type", type.Rows[0][0]);
                     ResourceHandler.checkResources();
                 }
@@ -480,7 +504,7 @@ namespace Game
                 {
                     item = getItem(itemID);
                     type = getType(item.Rows[0][3].ToString());
-                    cmd = new MySqlCommand("UPDATE Game_Items SET name = @name, source = @source, price = @price, power = @power, color = @color, image = @image, is_default = @default WHERE item_id = @itemid", connection);
+                    cmd = new MySqlCommand("UPDATE EX2_Items SET name = @name, source = @source, price = @price, power = @power, color = @color, image = @image, is_default = @default WHERE item_id = @itemid", connection);
                     cmd.Parameters.AddWithValue("@itemid", itemID);
                 }
                 connection.Open();
@@ -503,7 +527,7 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM Game_Inventory WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username)", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM EX2_Inventory WHERE player = (SELECT user_id FROM EX2_Accounts WHERE username = @username)", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -517,7 +541,7 @@ namespace Game
             data = new DataTable();
             if (datastatus)
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT It.source FROM Game_Items It, Game_Inventory Inv WHERE Inv.player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 2 AND Inv.item = It.item_id", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT It.source FROM EX2_Items It, EX2_Inventory Inv WHERE Inv.player = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 2 AND Inv.item = It.item_id", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -534,7 +558,7 @@ namespace Game
             data = new DataTable();
             if (datastatus)
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT It.power FROM Game_Items It, Game_Inventory Inv WHERE Inv.player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 1 AND Inv.item = It.item_id", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT It.power FROM EX2_Items It, EX2_Inventory Inv WHERE Inv.player = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 1 AND Inv.item = It.item_id", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -550,7 +574,7 @@ namespace Game
             data = new DataTable();
             if (datastatus)
             {
-                MySqlCommand cmd = new MySqlCommand("SELECT It.source FROM Game_Items It, Game_Inventory Inv WHERE Inv.player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 1 AND Inv.item = It.item_id", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT It.source FROM EX2_Items It, EX2_Inventory Inv WHERE Inv.player = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND Inv.equipped = 1 AND It.type = 1 AND Inv.item = It.item_id", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -565,12 +589,12 @@ namespace Game
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("UPDATE Game_Inventory SET equipped = 0 WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND item IN (SELECT item_id FROM Game_Items WHERE type = (SELECT type FROM Game_Items WHERE item_id = @item))", connection);
+                MySqlCommand cmd = new MySqlCommand("UPDATE EX2_Inventory SET equipped = 0 WHERE player = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND item IN (SELECT item_id FROM EX2_Items WHERE type = (SELECT type FROM EX2_Items WHERE item_id = @item))", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 cmd.Parameters.AddWithValue("@item", itemID);
                 cmd.ExecuteNonQuery();
 
-                cmd = new MySqlCommand("UPDATE Game_Inventory SET equipped = 1 WHERE player = (SELECT user_id FROM Game_Accounts WHERE username = @username) AND item = @item ", connection);
+                cmd = new MySqlCommand("UPDATE EX2_Inventory SET equipped = 1 WHERE player = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND item = @item ", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 cmd.Parameters.AddWithValue("@item", itemID);
                 cmd.ExecuteNonQuery();
@@ -579,16 +603,102 @@ namespace Game
         }
 
 
+        public static DataTable getControls()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT * FROM EX2_Controls", connection);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static void setUserControl(string control, string keycode = null)
+        {
+            if (datastatus)
+            {
+                MySqlCommand cmd;
+                connection.Open();
+                if (keycode == null)
+                {
+                    cmd = new MySqlCommand("UPDATE EX2_UserControls SET keycode = (SELECT default_keycode FROM EX2_Controls WHERE control_id = @control) WHERE control = @control AND user = (SELECT user_id FROM EX2_Accounts WHERE username = @username)", connection);
+                }
+                else
+                {
+                    cmd = new MySqlCommand("UPDATE EX2_UserControls SET keycode = @keycode WHERE control = @control AND user = (SELECT user_id FROM EX2_Accounts WHERE username = @username)", connection);
+                    cmd.Parameters.AddWithValue("@keycode", keycode);
+                }
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@control", control);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public static DataTable getUserControls()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT keycode,title,control_id FROM EX2_UserControls , EX2_Controls WHERE control = control_id AND user = (SELECT user_id FROM EX2_Accounts WHERE username = @username)", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+        
+        public static DataTable getUserControl(string control)
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                MySqlCommand cmd = new MySqlCommand("SELECT keycode,title,control_id FROM EX2_UserControls , EX2_Controls WHERE control = control_id AND user = (SELECT user_id FROM EX2_Accounts WHERE username = @username) AND control_id = @control", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@control", control);
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+            }
+            return data;
+        }
+
+        public static void createUserControl(string controlID,string username, string keycode = null)
+        {
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd;
+                if (keycode != null)
+                {
+                    cmd = new MySqlCommand("INSERT INTO EX2_UserControls (user,control,keycode) VALUES ((SELECT user_id FROM EX2_Accounts WHERE username = @username),@control,@item)", connection);
+                    cmd.Parameters.AddWithValue("@keycode", keycode);
+                }
+                else
+                {
+                    cmd = new MySqlCommand("INSERT INTO EX2_UserControls (user,control,keycode) VALUES ((SELECT user_id FROM EX2_Accounts WHERE username = @username),@control,(SELECT default_keycode FROM EX2_Controls WHERE control_id = @control))", connection);
+                }
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@control", controlID);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
         public static bool buyItem(string itemID)
         {
-            data.Clear();
+            data = new DataTable();
             if (datastatus)
             {
                 int balance = 0;
                 int price = 1;
 
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT coins  FROM Game_Accounts WHERE username = @username", connection);
+                MySqlCommand cmd = new MySqlCommand("SELECT coins  FROM EX2_Accounts WHERE username = @username", connection);
                 cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -600,7 +710,7 @@ namespace Game
                 data.Clear();
 
                 connection.Open();
-                cmd = new MySqlCommand("SELECT price  FROM Game_Items WHERE item_id = @item", connection);
+                cmd = new MySqlCommand("SELECT price  FROM EX2_Items WHERE item_id = @item", connection);
                 cmd.Parameters.AddWithValue("@item", itemID);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);
@@ -615,12 +725,12 @@ namespace Game
                 try
                 {
                     connection.Open();
-                    cmd = new MySqlCommand("UPDATE Game_Accounts SET coins = @balance WHERE username = @username", connection);
+                    cmd = new MySqlCommand("UPDATE EX2_Accounts SET coins = @balance WHERE username = @username", connection);
                     cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                     cmd.Parameters.AddWithValue("@balance", balance - price);
                     cmd.ExecuteNonQuery();
 
-                    cmd = new MySqlCommand("INSERT INTO Game_Inventory (player,item) VALUES ((SELECT user_id FROM Game_Accounts WHERE username = @username),@item)", connection);
+                    cmd = new MySqlCommand("INSERT INTO EX2_Inventory (player,item) VALUES ((SELECT user_id FROM EX2_Accounts WHERE username = @username),@item)", connection);
                     cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
                     cmd.Parameters.AddWithValue("@item", itemID);
                     cmd.ExecuteNonQuery();

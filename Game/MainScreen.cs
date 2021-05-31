@@ -18,6 +18,7 @@ namespace Game
         string previewType;
         string previewItem;
         string oldPrice;
+        string needKey;
         public MainScreen()
         {
             InitializeComponent();
@@ -49,14 +50,75 @@ namespace Game
 
         }
 
-        private void pbProfile_Click(object sender, EventArgs e)
-        {
-            showProfile();
-        }
+        private void activated(object sender, EventArgs e) => refreshCoins();
+        private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
+        private void txtSearch_TextChanged(object sender, EventArgs e) => showResultsSearch(((TextBox)sender).Text);
+        private void searchClick(object sender, EventArgs e) => showProfile(((Label)sender).Text);
+        private void pbProfile_Click(object sender, EventArgs e) => showProfile();
+        private void pbCancel_Click(object sender, EventArgs e) => showInventory();
+        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Player"));
+        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Gun"));
+        private void pbSettings_Click(object sender, EventArgs e) => showSettings();
+        private void pbScoreboard_Click(object sender, EventArgs e) => showLeaderboard();
+        private void pbExit_Click(object sender, EventArgs e) => System.Windows.Forms.Application.Exit();
+        private void pbInventory_Click(object sender, EventArgs e) => showInventory();
 
         public void refreshCoins()
         {
             lblCoin.Text = DataHandler.getCoins().ToString();
+        }
+
+        private void showSettings()
+        {
+            showPnl("pnlSettings");
+            tlpSettings.Controls.Clear();
+            tlpSettings.RowStyles.RemoveAt(0);
+            Font lblFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
+
+            DataTable controls = DataHandler.getUserControls();
+            for (int i = 0; i < controls.Rows.Count; i++)
+            {
+                tlpSettings.RowCount += 1;
+                Label btn = new Label()
+                {
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = AnchorStyles.Left,
+                    Text = Enum.Parse(typeof(Keys), controls.Rows[i][0].ToString()).ToString(),
+                    Font = lblFont,
+                    ForeColor = Color.White,
+                    BackgroundImage = Image.FromFile("GUI/control.png"),
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    BackColor = Color.Transparent,
+                    Cursor = Cursors.Hand,
+                    Name = controls.Rows[i][2].ToString()
+                };
+                btn.Click += new EventHandler(settingClick);
+                tlpSettings.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+                tlpSettings.Controls.Add(new Label() { TextAlign = ContentAlignment.MiddleRight,Anchor = AnchorStyles.Right | AnchorStyles.Left , Text = $"{controls.Rows[i][1]}:", Font = lblFont, ForeColor = Color.White, Height = 20 }, 0, i);
+                tlpSettings.Controls.Add(btn, 1, i);
+            }
+        }
+
+        private void settingClick(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
+            lbl.Text = "(Press A button)";
+            needKey = lbl.Name;
+        }
+        private void MainScreen_KeyDown(object sender, KeyEventArgs e)
+        {
+            Label lbl = tlpSettings.Controls.OfType<Label>().First(label => label.Name == needKey);
+            if (needKey!="")
+            {
+                Console.WriteLine((int)e.KeyCode);
+                if (e.KeyCode != Keys.Escape)
+                {
+                    DataHandler.setUserControl(needKey, ((int)e.KeyCode).ToString());
+                }
+                lbl.Text = Enum.Parse(typeof(Keys), DataHandler.getUserControl(needKey).Rows[0][0].ToString()).ToString();
+                lbl.Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
+            }
         }
 
         private void showProfile(string username = null)
@@ -106,11 +168,6 @@ namespace Game
             tlpStats.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[0][3].ToString() == "" ? "0:00:00" : tbl.Rows[0][3].ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor }, 1, 4);
         }
 
-        private void pbScoreboard_Click(object sender, EventArgs e)
-        {
-            showLeaderboard();
-        }
-
         private void showLeaderboard()
         {
             showPnl("pnlScoreboard");
@@ -132,9 +189,6 @@ namespace Game
                 tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[i][3].ToString().Substring(3), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 4, i);
             }
         }
-
-        private void pbExit_Click(object sender, EventArgs e) => System.Windows.Forms.Application.Exit();
-        private void pbInventory_Click(object sender, EventArgs e) => showInventory();
 
         private void showInventory()
         {
@@ -344,15 +398,6 @@ namespace Game
             tlpSearch.Height = height;
         }
 
-        private void activated(object sender, EventArgs e) => refreshCoins();
-
-        private void txtSearch_TextChanged(object sender, EventArgs e) => showResultsSearch(((TextBox)sender).Text);
-
-        private void searchClick(object sender, EventArgs e) => showProfile(((Label)sender).Text);
-
-        private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
-        private void pbCancel_Click(object sender, EventArgs e) => showInventory();
-
         private void showPnl(string name)
         {
             foreach (Panel pnl in tabs)
@@ -363,6 +408,7 @@ namespace Game
                 }
                 else
                 {
+                    this.ActiveControl = pnl;
                     pnl.Show();
                 }
             }
@@ -480,9 +526,6 @@ namespace Game
                 pbItemPreview.BackgroundImage = item;
             }
         }
-        
-        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Player"));
-        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Gun"));
 
         private void pbSave_Click(object sender, EventArgs e)
         {

@@ -48,7 +48,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.lblScoreboard = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pbInventory = new System.Windows.Forms.PictureBox();
             this.pnlInventory = new System.Windows.Forms.Panel();
             this.pbGunAdd = new System.Windows.Forms.PictureBox();
             this.pbPlayerAdd = new System.Windows.Forms.PictureBox();
@@ -74,6 +74,10 @@
             this.pbSave = new System.Windows.Forms.PictureBox();
             this.pbItemPreview = new System.Windows.Forms.PictureBox();
             this.lblItem = new System.Windows.Forms.Label();
+            this.pbSettings = new System.Windows.Forms.PictureBox();
+            this.pnlSettings = new System.Windows.Forms.Panel();
+            this.label13 = new System.Windows.Forms.Label();
+            this.tlpSettings = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
@@ -82,7 +86,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbReset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).BeginInit();
             this.pnlScoreboard.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInventory)).BeginInit();
             this.pnlInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGunAdd)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlayerAdd)).BeginInit();
@@ -94,6 +98,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).BeginInit();
+            this.pnlSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbPlay
@@ -115,7 +121,7 @@
             this.pbProfile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbProfile.BackgroundImage")));
             this.pbProfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbProfile.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbProfile.Location = new System.Drawing.Point(27, 160);
+            this.pbProfile.Location = new System.Drawing.Point(27, 150);
             this.pbProfile.Name = "pbProfile";
             this.pbProfile.Size = new System.Drawing.Size(182, 48);
             this.pbProfile.TabIndex = 2;
@@ -128,7 +134,7 @@
             this.pbScoreboard.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbScoreboard.BackgroundImage")));
             this.pbScoreboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbScoreboard.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbScoreboard.Location = new System.Drawing.Point(27, 235);
+            this.pbScoreboard.Location = new System.Drawing.Point(27, 215);
             this.pbScoreboard.Name = "pbScoreboard";
             this.pbScoreboard.Size = new System.Drawing.Size(182, 48);
             this.pbScoreboard.TabIndex = 3;
@@ -141,7 +147,7 @@
             this.pbExit.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbExit.BackgroundImage")));
             this.pbExit.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbExit.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbExit.Location = new System.Drawing.Point(27, 385);
+            this.pbExit.Location = new System.Drawing.Point(27, 410);
             this.pbExit.Name = "pbExit";
             this.pbExit.Size = new System.Drawing.Size(182, 48);
             this.pbExit.TabIndex = 4;
@@ -344,19 +350,19 @@
             this.lblScoreboard.TabIndex = 0;
             this.lblScoreboard.Text = "Leaderboard";
             // 
-            // pictureBox1
+            // pbInventory
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.InitialImage")));
-            this.pictureBox1.Location = new System.Drawing.Point(27, 310);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(182, 48);
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pbInventory_Click);
+            this.pbInventory.BackColor = System.Drawing.Color.Transparent;
+            this.pbInventory.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbInventory.BackgroundImage")));
+            this.pbInventory.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbInventory.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbInventory.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbInventory.InitialImage")));
+            this.pbInventory.Location = new System.Drawing.Point(27, 280);
+            this.pbInventory.Name = "pbInventory";
+            this.pbInventory.Size = new System.Drawing.Size(182, 48);
+            this.pbInventory.TabIndex = 8;
+            this.pbInventory.TabStop = false;
+            this.pbInventory.Click += new System.EventHandler(this.pbInventory_Click);
             // 
             // pnlInventory
             // 
@@ -666,6 +672,60 @@
             this.lblItem.Text = "Add item";
             this.lblItem.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // pbSettings
+            // 
+            this.pbSettings.BackColor = System.Drawing.Color.Transparent;
+            this.pbSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSettings.BackgroundImage")));
+            this.pbSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbSettings.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbSettings.InitialImage")));
+            this.pbSettings.Location = new System.Drawing.Point(27, 345);
+            this.pbSettings.Name = "pbSettings";
+            this.pbSettings.Size = new System.Drawing.Size(182, 48);
+            this.pbSettings.TabIndex = 12;
+            this.pbSettings.TabStop = false;
+            this.pbSettings.Click += new System.EventHandler(this.pbSettings_Click);
+            // 
+            // pnlSettings
+            // 
+            this.pnlSettings.BackColor = System.Drawing.Color.Transparent;
+            this.pnlSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlSettings.BackgroundImage")));
+            this.pnlSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlSettings.Controls.Add(this.label13);
+            this.pnlSettings.Controls.Add(this.tlpSettings);
+            this.pnlSettings.Location = new System.Drawing.Point(258, 3);
+            this.pnlSettings.Name = "pnlSettings";
+            this.pnlSettings.Size = new System.Drawing.Size(493, 474);
+            this.pnlSettings.TabIndex = 13;
+            // 
+            // label13
+            // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label13.AutoSize = true;
+            this.label13.BackColor = System.Drawing.Color.Transparent;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold);
+            this.label13.ForeColor = System.Drawing.Color.White;
+            this.label13.Location = new System.Drawing.Point(186, 138);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(121, 31);
+            this.label13.TabIndex = 3;
+            this.label13.Text = "Settings";
+            // 
+            // tlpSettings
+            // 
+            this.tlpSettings.BackColor = System.Drawing.Color.Transparent;
+            this.tlpSettings.ColumnCount = 2;
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.86073F));
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.13927F));
+            this.tlpSettings.Location = new System.Drawing.Point(76, 182);
+            this.tlpSettings.Name = "tlpSettings";
+            this.tlpSettings.RowCount = 1;
+            this.tlpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 218F));
+            this.tlpSettings.Size = new System.Drawing.Size(359, 257);
+            this.tlpSettings.TabIndex = 4;
+            // 
             // MainScreen
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -674,17 +734,19 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(800, 500);
+            this.Controls.Add(this.pnlSettings);
+            this.Controls.Add(this.pbSettings);
             this.Controls.Add(this.pbCoin);
             this.Controls.Add(this.lblCoin);
             this.Controls.Add(this.pbExit);
             this.Controls.Add(this.pbScoreboard);
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.pnlInventory);
+            this.Controls.Add(this.pbInventory);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
             this.Controls.Add(this.pnlItem);
+            this.Controls.Add(this.pnlInventory);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -693,6 +755,7 @@
             this.Text = "MainScreen";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(132)))), ((int)(((byte)(73)))));
             this.Activated += new System.EventHandler(this.activated);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainScreen_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainScreen_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).EndInit();
@@ -704,7 +767,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();
             this.pnlScoreboard.ResumeLayout(false);
             this.pnlScoreboard.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInventory)).EndInit();
             this.pnlInventory.ResumeLayout(false);
             this.pnlInventory.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGunAdd)).EndInit();
@@ -718,6 +781,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbCancel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).EndInit();
+            this.pnlSettings.ResumeLayout(false);
+            this.pnlSettings.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -738,7 +804,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TableLayoutPanel tlpScoreboard;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pbInventory;
         private System.Windows.Forms.Panel pnlInventory;
         private System.Windows.Forms.TableLayoutPanel tlpStats;
         private System.Windows.Forms.Label lblProfileTitle;
@@ -770,5 +836,9 @@
         private System.Windows.Forms.PictureBox pbDeleteItem;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.CheckBox cbDefault;
+        private System.Windows.Forms.PictureBox pbSettings;
+        private System.Windows.Forms.Panel pnlSettings;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.TableLayoutPanel tlpSettings;
     }
 }
