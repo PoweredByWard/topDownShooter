@@ -4,15 +4,17 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Game
 {
-    class Utils
+    static class Utils
     {
-        public Utils()
+        static public void quit()
         {
+            System.Windows.Forms.Application.Exit();
         }
-        public Bitmap rotateImg(Bitmap btm, double angleData)
+        static public Bitmap rotateImg(Bitmap btm, double angleData)
         {
             double rotationWidth = Math.Sqrt(btm.Width * btm.Width + btm.Height * btm.Height);
             double height = 0.5 * rotationWidth - 0.5 * rotationWidth * Math.Cos((btm.Height / (2 * Math.PI * rotationWidth)) * ((Math.PI / 180) * 360));
@@ -31,7 +33,7 @@ namespace Game
             return res;
         }
 
-        public Bitmap createHealthBar(int max, float current, int width, int height)
+        static public Bitmap createHealthBar(int max, float current, int width, int height)
         {
             float difference = (float)width / (float)max;
             int health = Convert.ToInt32(current * difference);
@@ -45,7 +47,7 @@ namespace Game
             return res;
         }
 
-        public bool[] checkCollision(RectangleF item1, RectangleF item2)
+        static public bool[] checkCollision(RectangleF item1, RectangleF item2)
         {
             bool[] collisions = new bool[4];
 
@@ -55,6 +57,53 @@ namespace Game
             collisions[2] = item1.Bottom >= item2.Top && item1.Bottom <= item2.Top + 4;
             collisions[3] = item1.Top <= item2.Bottom && item1.Top >= item2.Bottom - 4;
             return collisions;
+        }
+
+        static public Panel showPnl(string name,List<Panel>tabs)
+        {
+            foreach (Panel pnl in tabs)
+            {
+                if (pnl.Name != name)
+                {
+                    pnl.Hide();
+                }
+                else
+                {
+                    pnl.Show();
+                    pnl.BringToFront();
+                    return pnl;
+                }
+            }
+            return null;
+        }
+
+        static public void validateTextInt(TextBox txt,string oldPrice, string defaultValue = "0")
+        {
+            string text = txt.Text;
+            if (text == "")
+            {
+                txt.Text = defaultValue;
+                return;
+            }
+            try
+            {
+                int.Parse(text);
+                if (!text.Contains("-") && !text.Contains(".") && !text.Contains(","))
+                {
+                    oldPrice = text;
+                }
+                else
+                {
+                    txt.Text = oldPrice;
+                }
+            }
+            catch (Exception)
+            {
+                int focus = txt.SelectionStart;
+                txt.Text = oldPrice;
+                txt.SelectionStart = focus - 1;
+                txt.SelectionLength = 0;
+            }
         }
     }
 }

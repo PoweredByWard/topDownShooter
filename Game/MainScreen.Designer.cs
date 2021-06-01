@@ -41,6 +41,7 @@
             this.lblProfileTitle = new System.Windows.Forms.Label();
             this.tlpStats = new System.Windows.Forms.TableLayoutPanel();
             this.pnlScoreboard = new System.Windows.Forms.Panel();
+            this.pbSwitchSB = new System.Windows.Forms.PictureBox();
             this.tlpScoreboard = new System.Windows.Forms.TableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -86,6 +87,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbReset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).BeginInit();
             this.pnlScoreboard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSwitchSB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbInventory)).BeginInit();
             this.pnlInventory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbGunAdd)).BeginInit();
@@ -256,6 +258,7 @@
             this.pnlScoreboard.BackColor = System.Drawing.Color.Transparent;
             this.pnlScoreboard.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlScoreboard.BackgroundImage")));
             this.pnlScoreboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlScoreboard.Controls.Add(this.pbSwitchSB);
             this.pnlScoreboard.Controls.Add(this.tlpScoreboard);
             this.pnlScoreboard.Controls.Add(this.label5);
             this.pnlScoreboard.Controls.Add(this.label4);
@@ -268,6 +271,19 @@
             this.pnlScoreboard.Size = new System.Drawing.Size(493, 474);
             this.pnlScoreboard.TabIndex = 7;
             // 
+            // pbSwitchSB
+            // 
+            this.pbSwitchSB.BackColor = System.Drawing.Color.Transparent;
+            this.pbSwitchSB.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSwitchSB.BackgroundImage")));
+            this.pbSwitchSB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbSwitchSB.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbSwitchSB.Location = new System.Drawing.Point(58, 130);
+            this.pbSwitchSB.Name = "pbSwitchSB";
+            this.pbSwitchSB.Size = new System.Drawing.Size(165, 39);
+            this.pbSwitchSB.TabIndex = 9;
+            this.pbSwitchSB.TabStop = false;
+            this.pbSwitchSB.Click += new System.EventHandler(this.pbSwitchSB_Click);
+            // 
             // tlpScoreboard
             // 
             this.tlpScoreboard.AutoScroll = true;
@@ -277,11 +293,11 @@
             this.tlpScoreboard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
             this.tlpScoreboard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
             this.tlpScoreboard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
-            this.tlpScoreboard.Location = new System.Drawing.Point(32, 196);
+            this.tlpScoreboard.Location = new System.Drawing.Point(32, 215);
             this.tlpScoreboard.Name = "tlpScoreboard";
             this.tlpScoreboard.RowCount = 1;
             this.tlpScoreboard.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 258F));
-            this.tlpScoreboard.Size = new System.Drawing.Size(431, 258);
+            this.tlpScoreboard.Size = new System.Drawing.Size(431, 239);
             this.tlpScoreboard.TabIndex = 8;
             // 
             // label5
@@ -289,7 +305,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(37, 169);
+            this.label5.Location = new System.Drawing.Point(37, 187);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(21, 24);
             this.label5.TabIndex = 6;
@@ -300,7 +316,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(369, 169);
+            this.label4.Location = new System.Drawing.Point(369, 187);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(88, 24);
             this.label4.TabIndex = 5;
@@ -311,7 +327,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(303, 169);
+            this.label3.Location = new System.Drawing.Point(303, 187);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 24);
             this.label3.TabIndex = 4;
@@ -322,7 +338,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(232, 169);
+            this.label2.Location = new System.Drawing.Point(232, 187);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 24);
             this.label2.TabIndex = 3;
@@ -333,7 +349,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(92, 169);
+            this.label1.Location = new System.Drawing.Point(92, 187);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(105, 24);
             this.label1.TabIndex = 2;
@@ -344,7 +360,7 @@
             this.lblScoreboard.AutoSize = true;
             this.lblScoreboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblScoreboard.ForeColor = System.Drawing.Color.White;
-            this.lblScoreboard.Location = new System.Drawing.Point(157, 130);
+            this.lblScoreboard.Location = new System.Drawing.Point(230, 134);
             this.lblScoreboard.Name = "lblScoreboard";
             this.lblScoreboard.Size = new System.Drawing.Size(178, 31);
             this.lblScoreboard.TabIndex = 0;
@@ -536,7 +552,7 @@
             this.pbDeleteItem.TabIndex = 15;
             this.pbDeleteItem.TabStop = false;
             this.pbDeleteItem.Visible = false;
-            this.pbDeleteItem.Click += new System.EventHandler(this.pictureBox2_Click_1);
+            this.pbDeleteItem.Click += new System.EventHandler(this.pbDeleteItem_Click);
             // 
             // label11
             // 
@@ -567,7 +583,7 @@
             this.pbColor.Size = new System.Drawing.Size(116, 30);
             this.pbColor.TabIndex = 12;
             this.pbColor.TabStop = false;
-            this.pbColor.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.pbColor.Click += new System.EventHandler(this.pbColor_Click);
             // 
             // label10
             // 
@@ -716,14 +732,16 @@
             // tlpSettings
             // 
             this.tlpSettings.BackColor = System.Drawing.Color.Transparent;
-            this.tlpSettings.ColumnCount = 2;
+            this.tlpSettings.ColumnCount = 4;
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.86073F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.13927F));
-            this.tlpSettings.Location = new System.Drawing.Point(76, 182);
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.tlpSettings.Location = new System.Drawing.Point(32, 182);
             this.tlpSettings.Name = "tlpSettings";
             this.tlpSettings.RowCount = 1;
-            this.tlpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 218F));
-            this.tlpSettings.Size = new System.Drawing.Size(359, 257);
+            this.tlpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 257F));
+            this.tlpSettings.Size = new System.Drawing.Size(425, 257);
             this.tlpSettings.TabIndex = 4;
             // 
             // MainScreen
@@ -734,7 +752,6 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(800, 500);
-            this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.pbSettings);
             this.Controls.Add(this.pbCoin);
             this.Controls.Add(this.lblCoin);
@@ -743,10 +760,11 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pbInventory);
-            this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
             this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
+            this.Controls.Add(this.pnlSettings);
+            this.Controls.Add(this.pnlProfile);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -755,6 +773,7 @@
             this.Text = "MainScreen";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(132)))), ((int)(((byte)(73)))));
             this.Activated += new System.EventHandler(this.activated);
+            this.Deactivate += new System.EventHandler(this.deactivated);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainScreen_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainScreen_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
@@ -767,6 +786,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();
             this.pnlScoreboard.ResumeLayout(false);
             this.pnlScoreboard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSwitchSB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbInventory)).EndInit();
             this.pnlInventory.ResumeLayout(false);
             this.pnlInventory.PerformLayout();
@@ -840,5 +860,6 @@
         private System.Windows.Forms.Panel pnlSettings;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TableLayoutPanel tlpSettings;
+        private System.Windows.Forms.PictureBox pbSwitchSB;
     }
 }

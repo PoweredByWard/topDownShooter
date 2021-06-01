@@ -151,6 +151,7 @@
             // lblToLogin
             // 
             this.lblToLogin.AutoSize = true;
+            this.lblToLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblToLogin.ForeColor = System.Drawing.Color.MediumBlue;
             this.lblToLogin.Location = new System.Drawing.Point(233, 206);
             this.lblToLogin.Name = "lblToLogin";
@@ -231,6 +232,7 @@
             // lblToRegister
             // 
             this.lblToRegister.AutoSize = true;
+            this.lblToRegister.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblToRegister.ForeColor = System.Drawing.Color.MediumBlue;
             this.lblToRegister.Location = new System.Drawing.Point(184, 182);
             this.lblToRegister.Name = "lblToRegister";

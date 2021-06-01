@@ -11,14 +11,27 @@ namespace Game
     {
         static SoundPlayer gunShot = new SoundPlayer($"{Environment.CurrentDirectory}\\Sounds\\gun.wav");
         static SoundPlayer turretShot = new SoundPlayer($"{Environment.CurrentDirectory}\\Sounds\\turret.wav");
+        static bool muted;
         static public void playGun()
         {
+            if (muted) return;
             gunShot.Play();
         }
         
         static public void playTurret()
         {
+            if (muted) return;
             turretShot.Play();
+        }
+
+        static public void setMute(bool muteSetting)
+        {
+            muted = muteSetting;
+        }
+
+        static public void togleMute()
+        {
+            muted = !muted;
         }
 
     }

@@ -30,14 +30,12 @@ namespace Game
         {
             Label senderlbl = (Label)sender;
             senderlbl.Font = new Font(senderlbl.Font.Name, senderlbl.Font.SizeInPoints, FontStyle.Underline);
-            this.Cursor = Cursors.Hand;
         }
 
         private void outHover(object sender, EventArgs e)
         {
             Label senderlbl = (Label)sender;
             senderlbl.Font = new Font(senderlbl.Font.Name, senderlbl.Font.SizeInPoints, FontStyle.Regular);
-            this.Cursor = Cursors.Default;
         }
 
         private void lblToLogin_Click(object sender, EventArgs e)
@@ -133,9 +131,6 @@ namespace Game
             }
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            System.Windows.Forms.Application.Exit();
-        }
+        private void pictureBox1_Click(object sender, EventArgs e) => Utils.quit();
     }
 }

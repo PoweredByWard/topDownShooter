@@ -65,10 +65,5 @@ namespace Game
         {
             game.shoot(e);
         }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }

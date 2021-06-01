@@ -18,7 +18,8 @@ namespace Game
         string previewType;
         string previewItem;
         string oldPrice;
-        string needKey;
+        string needKey = "";
+        bool personalSB;
         public MainScreen()
         {
             InitializeComponent();
@@ -29,6 +30,25 @@ namespace Game
             
         }
 
+        //start van updates
+        private void activated(object sender, EventArgs e) => refreshCoins();
+
+        private void deactivated(object sender, EventArgs e)
+        {
+            if (needKey != "")
+            {
+                showSettings();
+            }
+        }
+
+        public void refreshCoins()
+        {
+            lblCoin.Text = DataHandler.getCoins().ToString();
+        }
+
+        //einde van updates
+
+        //start van play
         private void pbPlay_Click(object sender, EventArgs e)
         {
             ResourceHandler.checkResources();
@@ -50,85 +70,22 @@ namespace Game
 
         }
 
-        private void activated(object sender, EventArgs e) => refreshCoins();
-        private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
+        //einde van play
+
+        //start van profielen
         private void txtSearch_TextChanged(object sender, EventArgs e) => showResultsSearch(((TextBox)sender).Text);
         private void searchClick(object sender, EventArgs e) => showProfile(((Label)sender).Text);
         private void pbProfile_Click(object sender, EventArgs e) => showProfile();
-        private void pbCancel_Click(object sender, EventArgs e) => showInventory();
-        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Player"));
-        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Gun"));
-        private void pbSettings_Click(object sender, EventArgs e) => showSettings();
-        private void pbScoreboard_Click(object sender, EventArgs e) => showLeaderboard();
-        private void pbExit_Click(object sender, EventArgs e) => System.Windows.Forms.Application.Exit();
-        private void pbInventory_Click(object sender, EventArgs e) => showInventory();
-
-        public void refreshCoins()
-        {
-            lblCoin.Text = DataHandler.getCoins().ToString();
-        }
-
-        private void showSettings()
-        {
-            showPnl("pnlSettings");
-            tlpSettings.Controls.Clear();
-            tlpSettings.RowStyles.RemoveAt(0);
-            Font lblFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
-
-            DataTable controls = DataHandler.getUserControls();
-            for (int i = 0; i < controls.Rows.Count; i++)
-            {
-                tlpSettings.RowCount += 1;
-                Label btn = new Label()
-                {
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Anchor = AnchorStyles.Left,
-                    Text = Enum.Parse(typeof(Keys), controls.Rows[i][0].ToString()).ToString(),
-                    Font = lblFont,
-                    ForeColor = Color.White,
-                    BackgroundImage = Image.FromFile("GUI/control.png"),
-                    BackgroundImageLayout = ImageLayout.Stretch,
-                    BackColor = Color.Transparent,
-                    Cursor = Cursors.Hand,
-                    Name = controls.Rows[i][2].ToString()
-                };
-                btn.Click += new EventHandler(settingClick);
-                tlpSettings.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
-                tlpSettings.Controls.Add(new Label() { TextAlign = ContentAlignment.MiddleRight,Anchor = AnchorStyles.Right | AnchorStyles.Left , Text = $"{controls.Rows[i][1]}:", Font = lblFont, ForeColor = Color.White, Height = 20 }, 0, i);
-                tlpSettings.Controls.Add(btn, 1, i);
-            }
-        }
-
-        private void settingClick(object sender, EventArgs e)
-        {
-            Label lbl = (Label)sender;
-            lbl.Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
-            lbl.Text = "(Press A button)";
-            needKey = lbl.Name;
-        }
-        private void MainScreen_KeyDown(object sender, KeyEventArgs e)
-        {
-            Label lbl = tlpSettings.Controls.OfType<Label>().First(label => label.Name == needKey);
-            if (needKey!="")
-            {
-                Console.WriteLine((int)e.KeyCode);
-                if (e.KeyCode != Keys.Escape)
-                {
-                    DataHandler.setUserControl(needKey, ((int)e.KeyCode).ToString());
-                }
-                lbl.Text = Enum.Parse(typeof(Keys), DataHandler.getUserControl(needKey).Rows[0][0].ToString()).ToString();
-                lbl.Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
-            }
-        }
+        private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
 
         private void showProfile(string username = null)
         {
-            showPnl("pnlProfile");
+            this.ActiveControl = Utils.showPnl("pnlProfile", tabs);
             account = username == null ? AccountHandler.getUsername() : username;
 
             lblProfileTitle.Text = account != AccountHandler.getUsername() ? $"{account}'s Profile" : "Your profile";
 
-            if (!DataHandler.isAdmin(account))pbDelete.Visible = DataHandler.isAdmin(AccountHandler.getUsername());
+            if (!DataHandler.isAdmin(account)) pbDelete.Visible = DataHandler.isAdmin(AccountHandler.getUsername());
 
             tlpSearch.Visible = false;
             if (DataHandler.isAdmin(AccountHandler.getUsername()))
@@ -168,9 +125,96 @@ namespace Game
             tlpStats.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[0][3].ToString() == "" ? "0:00:00" : tbl.Rows[0][3].ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor }, 1, 4);
         }
 
+        private void delete_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No) return;
+            bool deleted = DataHandler.deleteAccount(account);
+            if (deleted)
+            {
+                MessageBox.Show($"{account}'s Account got deleted.");
+                showProfile();
+            }
+            else MessageBox.Show($"Couldn't delete {account}'s account.");
+        }
+
+        private void reset_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to reset {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.No) return;
+            bool reset = DataHandler.resetAccount(account);
+            if (reset)
+            {
+                MessageBox.Show($"{account}'s Account got reset.");
+                showProfile(account);
+            }
+            else MessageBox.Show($"Couldn't reset {account}'s account.");
+        }
+
+        private void showResultsSearch(string searchValue)
+        {
+            tlpSearch.Visible = searchValue != "";
+
+            DataTable result = DataHandler.findUser(searchValue);
+
+            tlpSearch.Controls.Clear();
+
+            Font lblFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
+            tlpSearch.RowCount = 0;
+            tlpSearch.RowStyles.Clear();
+            int height = 0;
+            for (int i = 0; i < result.Rows.Count; i++)
+            {
+                tlpSearch.RowCount++;
+                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute, 21));
+
+                Label lblSearchItem = new Label
+                {
+                    Text = result.Rows[i][0].ToString(),
+                    Height = 20,
+                    BackColor = Color.White,
+                    Width = tlpSearch.Width,
+                    Font = lblFont,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom),
+                    ForeColor = Color.Black,
+                    Cursor = Cursors.Hand
+                };
+                height += lblSearchItem.Height;
+                lblSearchItem.Click += new EventHandler(searchClick);
+                tlpSearch.Controls.Add(lblSearchItem, 0, i);
+            }
+
+            if (result.Rows.Count == 0)
+            {
+                tlpSearch.RowCount++;
+                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute, 21));
+
+                Label lblSearchItem = new Label
+                {
+                    Text = "No results",
+                    Height = 20,
+                    BackColor = Color.White,
+                    Width = tlpSearch.Width,
+                    Font = lblFont,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom),
+                    ForeColor = Color.Black,
+                };
+                height += lblSearchItem.Height;
+                tlpSearch.Controls.Add(lblSearchItem, 0, 0);
+            }
+
+            tlpSearch.Height = height;
+        }
+
+        //einde van profielen
+
+        //start van scoreborden
+        private void pbScoreboard_Click(object sender, EventArgs e) => showLeaderboard();
         private void showLeaderboard()
         {
-            showPnl("pnlScoreboard");
+            this.ActiveControl = Utils.showPnl("pnlScoreboard",tabs);
             DataTable tbl = DataHandler.getTop(10);
             tlpScoreboard.Controls.Clear();
             tlpScoreboard.RowCount = 0;
@@ -189,11 +233,31 @@ namespace Game
                 tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[i][3].ToString().Substring(3), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 4, i);
             }
         }
+        private void pbSwitchSB_Click(object sender, EventArgs e)
+        {
+            if (personalSB)
+            {
+                pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showPersonal.png");
+            }
+            else
+            {
+                pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showGlobal.png");
+            }
+
+            personalSB = !personalSB;
+        }
+
+        //einde van scoreborden
+
+        //start van inventaris
+        private void pbInventory_Click(object sender, EventArgs e) => showInventory();
+        private void pbCancel_Click(object sender, EventArgs e) => showInventory();
+        private void pbPlayerAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Player"));
+        private void pbGunAdd_Click(object sender, EventArgs e) => showPanelItem(DataHandler.getTypeIDByName("Gun"));
 
         private void showInventory()
         {
-            showPnl("pnlInventory");
-
+            this.ActiveControl = Utils.showPnl("pnlInventory",tabs);
             if (DataHandler.isAdmin())
             {
                 pbPlayerAdd.Show();
@@ -341,113 +405,16 @@ namespace Game
             return inventoryItem;
         }
 
+        //einde van inventaris
 
-        private void showResultsSearch(string searchValue)
-        {
-            tlpSearch.Visible = searchValue != "";
-
-            DataTable result = DataHandler.findUser(searchValue);
-
-            tlpSearch.Controls.Clear();
-
-            Font lblFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
-            tlpSearch.RowCount = 0;
-            tlpSearch.RowStyles.Clear();
-            int height = 0;
-            for (int i = 0; i < result.Rows.Count; i++)
-            {
-                tlpSearch.RowCount++;
-                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute, 21));
-
-                Label lblSearchItem = new Label {
-                    Text = result.Rows[i][0].ToString(),
-                    Height = 20,
-                    BackColor = Color.White,
-                    Width = tlpSearch.Width,
-                    Font = lblFont,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom),
-                    ForeColor = Color.Black,
-                    Cursor = Cursors.Hand
-                };
-                height += lblSearchItem.Height;
-                lblSearchItem.Click += new EventHandler(searchClick);
-                tlpSearch.Controls.Add(lblSearchItem, 0, i);
-            }
-
-            if (result.Rows.Count==0)
-            {
-                tlpSearch.RowCount++;
-                tlpSearch.RowStyles.Add(new RowStyle(SizeType.Absolute, 21));
-
-                Label lblSearchItem = new Label
-                {
-                    Text = "No results",
-                    Height = 20,
-                    BackColor = Color.White,
-                    Width = tlpSearch.Width,
-                    Font = lblFont,
-                    TextAlign = ContentAlignment.MiddleCenter,
-                    Anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom),
-                    ForeColor = Color.Black,
-                };
-                height += lblSearchItem.Height;
-                tlpSearch.Controls.Add(lblSearchItem, 0, 0);
-            }
-
-            tlpSearch.Height = height;
-        }
-
-        private void showPnl(string name)
-        {
-            foreach (Panel pnl in tabs)
-            {
-                if (pnl.Name != name)
-                {
-                    pnl.Hide();
-                }
-                else
-                {
-                    this.ActiveControl = pnl;
-                    pnl.Show();
-                }
-            }
-        }
-
-        private void delete_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.No) return;
-            bool deleted = DataHandler.deleteAccount(account);
-            if (deleted) 
-            {
-                MessageBox.Show($"{account}'s Account got deleted.");
-                showProfile();
-            }else MessageBox.Show($"Couldn't delete {account}'s account.");
-        }
-
-        private void reset_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = MessageBox.Show($"Are you sure you want to reset {account}'s account?", "Confirmation", MessageBoxButtons.YesNo);
-            if (dialogResult == DialogResult.No) return;
-            bool reset = DataHandler.resetAccount(account);
-            if (reset)
-            {
-                MessageBox.Show($"{account}'s Account got reset.");
-                showProfile(account);
-            }
-            else MessageBox.Show($"Couldn't reset {account}'s account.");
-        }
-
+        //start van item voorbeeld
         private void showPanelItem(string type = null)
         {
             previewType = type;
-            Console.WriteLine(type);
-            if (previewType != null)previewItem = null;
-            showPnl("pnlItem");
-            Console.WriteLine(previewType);
+            this.ActiveControl = Utils.showPnl("pnlItem",tabs);
             tbPower.Maximum = 2;
-            if (previewItem != null)
+
+            if (previewType == null)
             {
                 
                 pbDeleteItem.Show();
@@ -461,7 +428,6 @@ namespace Game
                 tbName.Text = itemtbl.Rows[0][1].ToString();
                 tbPrice.Text = itemtbl.Rows[0][4].ToString();
                 oldPrice = itemtbl.Rows[0][4].ToString();
-                Console.WriteLine(itemtbl.Rows[0][8].ToString());
                 if (itemtbl.Rows[0][8].ToString()=="False")
                 {
                     cbDefault.Checked = false;
@@ -470,6 +436,7 @@ namespace Game
                 }
                 else
                 {
+                    previewItem = null;
                     cbDefault.Checked = true;
                     cbDefault.Enabled = false;
                     pbDeleteItem.Hide();
@@ -545,7 +512,7 @@ namespace Game
             showInventory();
         }
 
-        private void pictureBox2_Click(object sender, EventArgs e)
+        private void pbColor_Click(object sender, EventArgs e)
         {
             DataRow item;
             string[] rgb = new string[] { };
@@ -567,37 +534,9 @@ namespace Game
             }
         }
 
-        private void tbPrice_TextChanged(object sender, EventArgs e)
-        {
-            TextBox txt = (TextBox)sender;
-            string text = txt.Text;
-            if (text == "")
-            {
-                txt.Text = "0";
-                return;
-            }
-            try
-            {
-                int.Parse(text);
-                if (!text.Contains("-") && !text.Contains(".") && !text.Contains(","))
-                {
-                    oldPrice = text;
-                }
-                else
-                {
-                    txt.Text = oldPrice;
-                }
-            }
-            catch (Exception)
-            {
-                int focus = txt.SelectionStart;
-                txt.Text = oldPrice;
-                txt.SelectionStart = focus-1;
-                txt.SelectionLength = 0;
-            }
-        }
+        private void tbPrice_TextChanged(object sender, EventArgs e) => Utils.validateTextInt((TextBox)sender,oldPrice);
 
-        private void pictureBox2_Click_1(object sender, EventArgs e)
+        private void pbDeleteItem_Click(object sender, EventArgs e)
         {
             DialogResult dialogResult = MessageBox.Show($"Are you sure you want to delete this item?", "Confirmation", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.No) return;
@@ -609,6 +548,69 @@ namespace Game
             }
             else MessageBox.Show($"Couldn't delete this Item.");
         }
+        //einde van item voorbeeld
+
+        //start van settings
+        private void pbSettings_Click(object sender, EventArgs e) => showSettings();
+        private void showSettings()
+        {
+            this.ActiveControl = Utils.showPnl("pnlSettings", tabs);
+            tlpSettings.Controls.Clear();
+            tlpSettings.RowStyles.RemoveAt(0);
+            Font lblFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
+
+            DataTable controls = DataHandler.getUserControls();
+            for (int i = 0; i < controls.Rows.Count; i++)
+            {
+                tlpSettings.RowCount += 1;
+                Label btn = new Label()
+                {
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Anchor = AnchorStyles.Left,
+                    Text = Enum.Parse(typeof(Keys), controls.Rows[i][0].ToString()).ToString(),
+                    Font = lblFont,
+                    ForeColor = Color.White,
+                    BackgroundImage = Image.FromFile("GUI/control.png"),
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    BackColor = Color.Transparent,
+                    Cursor = Cursors.Hand,
+                    Name = controls.Rows[i][2].ToString()
+                };
+                btn.Click += new EventHandler(settingClick);
+                tlpSettings.RowStyles.Add(new RowStyle(SizeType.Absolute, 35));
+                tlpSettings.Controls.Add(new Label() { TextAlign = ContentAlignment.MiddleRight, Anchor = AnchorStyles.Right | AnchorStyles.Left, Text = $"{controls.Rows[i][1]}:", Font = lblFont, ForeColor = Color.White, Height = 20 }, 0, i);
+                tlpSettings.Controls.Add(btn, 1, i);
+            }
+        }
+
+        private void settingClick(object sender, EventArgs e)
+        {
+            Label lbl = (Label)sender;
+            lbl.Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
+            lbl.Text = "(Press A button)";
+            needKey = lbl.Name;
+        }
+        private void MainScreen_KeyDown(object sender, KeyEventArgs e)
+        {
+            Label lbl = tlpSettings.Controls.OfType<Label>().First(label => label.Name == needKey);
+            if (needKey != "")
+            {
+                Console.WriteLine((int)e.KeyCode);
+                if (e.KeyCode != Keys.Escape)
+                {
+                    DataHandler.setUserControl(needKey, ((int)e.KeyCode).ToString());
+                }
+                lbl.Text = Enum.Parse(typeof(Keys), DataHandler.getUserControl(needKey).Rows[0][0].ToString()).ToString();
+                lbl.Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
+            }
+        }
+
+        //einde van settings
+
+        //start van exit
+        private void pbExit_Click(object sender, EventArgs e) => Utils.quit();
+
+        //einde van exit
     }
 }
 
