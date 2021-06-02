@@ -45,7 +45,7 @@ namespace Game
             backgroundSize = ui.Size;
             using (Graphics g = Graphics.FromImage(ui))
             {
-                g.DrawImage(Image.FromFile("GUI/coin.png"), new Point(backgroundSize.Width - (200), 5));
+                g.DrawImage(Image.FromFile("GUI/dollar.png"), new Point(backgroundSize.Width - (200), 5));
                 for (int i = 0; i < abilities.Count; i++)
                 {
                     g.DrawImage(abilities[i], new Point(ui.Width - (abilities[i].Width + 15), i * 50 + 60));

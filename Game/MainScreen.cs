@@ -19,6 +19,7 @@ namespace Game
         string previewItem;
         string oldPrice;
         string needKey = "";
+        string valueLeaderboard;
         bool personalSB;
         public MainScreen()
         {
@@ -64,7 +65,7 @@ namespace Game
             }
             if (!opened)
             {
-                GameForm   gameFrm = new GameForm();
+                GameForm gameFrm = new GameForm();
                 gameFrm.Show();
             }
 
@@ -212,10 +213,24 @@ namespace Game
 
         //start van scoreborden
         private void pbScoreboard_Click(object sender, EventArgs e) => showLeaderboard();
+
+        private void tbValueScoreboard_Click(object sender, EventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+            txt.SelectionStart =  0;
+            txt.SelectionLength = txt.Text.Length;
+        }
+
         private void showLeaderboard()
         {
+            valueLeaderboard = personalSB ? "7" : "10";
             this.ActiveControl = Utils.showPnl("pnlScoreboard",tabs);
-            DataTable tbl = DataHandler.getTop(10);
+            loadLeaderboard(int.Parse(valueLeaderboard));
+        }
+
+        private void loadLeaderboard(int value)
+        {
+            DataTable tbl = DataHandler.getTop(value, personalSB);
             tlpScoreboard.Controls.Clear();
             tlpScoreboard.RowCount = 0;
             tlpScoreboard.RowStyles.RemoveAt(0);
@@ -226,25 +241,41 @@ namespace Game
                 Font lblFont = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
                 ContentAlignment align = ContentAlignment.TopCenter;
                 AnchorStyles anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
-                tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tlpScoreboard.RowCount.ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height=20 }, 0, i);
+                tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tlpScoreboard.RowCount.ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 0, i);
                 tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[i][0].ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 1, i);
                 tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[i][1].ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 2, i);
                 tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[i][2].ToString(), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 3, i);
                 tlpScoreboard.Controls.Add(new Label() { TextAlign = align, Text = tbl.Rows[i][3].ToString().Substring(3), Font = lblFont, ForeColor = Color.White, Anchor = anchor, Height = 20 }, 4, i);
             }
         }
+
+        private void pbLeaderBoardFilterSave_Click(object sender, EventArgs e) => loadLeaderboard(int.Parse((tbValueScoreboard.Text)));
+
         private void pbSwitchSB_Click(object sender, EventArgs e)
         {
+            personalSB = !personalSB;
             if (personalSB)
             {
+                valueLeaderboard = "7";
+                lblFilter.Text = "Range in days:";
+
                 pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showPersonal.png");
             }
             else
             {
+                valueLeaderboard = "10";
+                lblFilter.Text = "Show top:";
                 pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showGlobal.png");
             }
+            tbValueScoreboard.Text = valueLeaderboard;
+            tbValueScoreboard.Location = new Point(lblFilter.Location.X + lblFilter.Width + 5, tbValueScoreboard.Location.Y);
+            loadLeaderboard(int.Parse(valueLeaderboard));
+        }
 
-            personalSB = !personalSB;
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(valueLeaderboard);
+            Utils.validateTextInt((TextBox)sender, valueLeaderboard, valueLeaderboard);
         }
 
         //einde van scoreborden
@@ -602,6 +633,16 @@ namespace Game
                 }
                 lbl.Text = Enum.Parse(typeof(Keys), DataHandler.getUserControl(needKey).Rows[0][0].ToString()).ToString();
                 lbl.Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
+            }
+        }
+
+        private void savePassword_Click(object sender, EventArgs e)
+        {
+            if (Utils.checkPassword(tbPassword.Text,tbRepeatPassword.Text))
+            {
+                bool done = DataHandler.changePassword(tbPassword.Text);
+                if (done)MessageBox.Show("Password successfully changed");
+                else MessageBox.Show("Something went wrong");
             }
         }
 

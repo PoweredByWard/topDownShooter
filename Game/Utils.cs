@@ -51,11 +51,18 @@ namespace Game
         {
             bool[] collisions = new bool[4];
 
-            collisions[0] = item1.Right >= item2.Left && item1.Right <= item2.Left+4; 
+            Console.WriteLine(item1.Bottom <= item2.Top && item1.Top <= item2.Bottom);
+
+            collisions[0] = item1.Right >= item2.Left && item1.Right <= item2.Left + 4;
             collisions[1] = item1.Left <= item2.Right && item1.Left >= item2.Right - 4;
 
             collisions[2] = item1.Bottom >= item2.Top && item1.Bottom <= item2.Top + 4;
             collisions[3] = item1.Top <= item2.Bottom && item1.Top >= item2.Bottom - 4;
+
+            if (collisions[0]&& collisions[2])collisions[2] = false;
+            if (collisions[1] && collisions[3]) collisions[3] = false;
+
+
             return collisions;
         }
 
@@ -104,6 +111,26 @@ namespace Game
                 txt.SelectionStart = focus - 1;
                 txt.SelectionLength = 0;
             }
+        }
+
+        static public int calculateScore(int kills,double minutes)
+        {
+            return (int)Math.Round((kills * 2 + (minutes * 5 > 50 ? 50 : minutes * 5)) * 3);
+        }
+
+        static public bool checkPassword(string password, string repeat)
+        {
+            if (password.Length <= 5)
+            {
+                MessageBox.Show("Your password has to be at least 6 karaketers.");
+                return false;
+            }
+            else if (password != repeat)
+            {
+                MessageBox.Show("Please fill in the same password.");
+                return false;
+            }
+            return true;
         }
     }
 }

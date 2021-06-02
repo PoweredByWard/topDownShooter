@@ -27,8 +27,8 @@ namespace Game
             damageDealt = damageDealtData;
             kills = killsData;
             duration = durationData;
-            Console.WriteLine(kills);
-            coins = (int)Math.Round((kills * 2 + (duration.TotalMinutes * 5 > 50 ? 50 : duration.TotalMinutes * 5)) * 3);
+            
+            coins = Utils.calculateScore(kills, duration.TotalMinutes); 
             
 
             InitializeComponent();
@@ -84,6 +84,10 @@ namespace Game
                     Application.OpenForms[i].Focus();
                     opened = true;
                 }
+                if (Application.OpenForms[i].Name == "GameForm")
+                {
+                    Application.OpenForms[i].Dispose();
+                }
             }
             if (!opened)
             {
@@ -91,7 +95,7 @@ namespace Game
                 menu.Show();
                 menu.Focus();
             }
-            this.Hide();
+            this.Dispose();
         }
 
         private void pbSave_Click(object sender, EventArgs e)

@@ -18,6 +18,7 @@ namespace Game
         Graphics g;
         Timer drawTimer;
         Panel pnlMain;
+        Bitmap UI;
         //einde teken attributen
 
         //start timers
@@ -65,6 +66,7 @@ namespace Game
         //einde locaties
 
         //start tijden
+        DateTime gamestart;
         DateTime lastPaused;
         DateTime lastWave;
         DateTime lastFrame;
@@ -96,15 +98,10 @@ namespace Game
 
         //start andere variablen
         Random rn = new Random();
-        bool paused;
         //einde andere variablen
 
         public GameHandler(Panel pnl, Timer drawTimerData,Form gameFormData)
         {
-            //start UI elements
-            inventory = new InventoryHandler(player.getPosition());
-            uiHandler = new UIHandler(player,this);
-            //einde UI elements
 
             //start init variabelen
             pnlMain = pnl;
@@ -125,8 +122,9 @@ namespace Game
             //einde delta
 
             //start tijden
-            lastPaused = DateTime.Now.AddMilliseconds(-250);
+            lastPaused = DateTime.Now.AddMilliseconds(-400);
             lastWave = DateTime.Now;
+            gamestart = DateTime.Now;
             //einde tijden
 
             //start map
@@ -135,10 +133,17 @@ namespace Game
 
             //start player
             Point playerSpawn = getRandomSpawn(false);
+            playerSpawn = new Point(playerSpawn.X + 10, playerSpawn.Y + 10);
             player = new PlayerHandler(playerSpawn.X, playerSpawn.Y);
             SizeF playerSize = player.getSkin().Size;
             playerContainer = new RectangleF(playerSpawn.X, playerSpawn.Y, playerSize.Width, playerSize.Height);
             //einde player
+
+            //start UI elements
+            inventory = new InventoryHandler(player.getPosition());
+            uiHandler = new UIHandler(player, this);
+            drawUI();
+            //einde UI elements
 
             //start inputs
             DataTable keys = DataHandler.getUserControls();
@@ -224,8 +229,6 @@ namespace Game
 
         public void checkInputs()
         {
-
-
             int moveX = 0;
             int moveY = 0;
             Console.WriteLine();
@@ -297,7 +300,7 @@ namespace Game
                 {
                     int playerX = player.getPosition().X;
                     int playerY = player.getPosition().Y;
-                    if (!Enumerable.Range(playerX - 400, playerX + 400).Contains(spawn.X) && !Enumerable.Range(playerY - 300, playerY + 300).Contains(spawn.Y))
+                    if (!Enumerable.Range(playerX - 200, playerX + 200).Contains(spawn.X) && !Enumerable.Range(playerY - 100, playerY + 100).Contains(spawn.Y))
                     {
                         return spawn;
                     }
@@ -357,8 +360,12 @@ namespace Game
                     }
                 }
             }
-            pnlMain.BackgroundImage = uiHandler.drawUI(res);
+            pnlMain.BackgroundImage = res;
+        }
 
+        private void drawUI()
+        {
+            UI = uiHandler.drawUI(new Bitmap(pnlMain.Width, pnlMain.Height));
         }
 
         //einde map
@@ -647,6 +654,7 @@ namespace Game
             EndGameForm statsFrm = new EndGameForm(waveHndlr.getWave(), turretsPlaced, damageDealt, kills, DateTime.Now - gameStart);
             statsFrm.Show();
             gameForm.Hide();
+            
         }
 
         public void pauseGame(bool pause)
@@ -698,13 +706,13 @@ namespace Game
         public void draw(Graphics gData)
         {
             g = gData;
-            Console.WriteLine(timedif);
             if (timedif!=0)
             {
-                g.DrawString($"{(int)(1000  / timedif)} FPS", new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold), Brushes.White, 5, 5);
+                Console.WriteLine((DateTime.Now - gamestart));
+                g.DrawString($"{(int)(1000  / timedif)} FPS\n\rTime past: {Math.Floor((DateTime.Now - gameStart).TotalMinutes)}{(DateTime.Now - gameStart).Seconds} \n\rKills: {kills}\n\rCoins earned: {Utils.calculateScore(kills, (DateTime.Now - gamestart).TotalMinutes)}", new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold), Brushes.White, 5, 5);
             }
 
-            g.DrawString(uiHandler.getCoins().ToString(), new Font(FontFamily.GenericSansSerif, 24, FontStyle.Bold), Brushes.White, pnlMain.Width-150, 10);
+            g.DrawString(uiHandler.getCoins().ToString(), new Font(FontFamily.GenericSansSerif, 24, FontStyle.Bold), Brushes.White, pnlMain.Width-150, 21);
             for (int i = 0; i < turrets.Count; i++)
             {
                 Bitmap turretSkin = (Bitmap)turrets[i].getSkin();
@@ -750,7 +758,7 @@ namespace Game
                 sf.Alignment = StringAlignment.Center;
                 g.DrawString($"Wave {waveHndlr.getWave()} incomming!", new Font(FontFamily.GenericSansSerif, 50, FontStyle.Bold), Brushes.White,450,400);
             }
-
+            g.DrawImage(UI, new Point(0,0));
         }
         //einde draw-move
 

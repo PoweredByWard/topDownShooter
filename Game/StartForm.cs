@@ -63,8 +63,8 @@ namespace Game
             else
             {
                 username = txtRegisterUsername.Text;
-                password = txtRegisterPassword.Text;
-                if (txtRegisterUsername.Text.Length <= 3)
+
+                if (password.Length <= 3)
                 {
                     MessageBox.Show("Your username has to be longer then 3 karaketers.");
                     return false;
@@ -72,17 +72,10 @@ namespace Game
                 else if (DataHandler.isTaken(txtRegisterUsername.Text))
                 {
                     MessageBox.Show("This username is already in use.");
-                }
-                else if (txtRegisterPassword.Text.Length <= 5)
-                {
-                    MessageBox.Show("Your password has to be at least 6 karaketers.");
                     return false;
                 }
-                else if (txtRegisterPassword.Text != txtRegisterRepeatPassword.Text)
-                {
-                    MessageBox.Show("Please fill in the same password.");
-                    return false;
-                }
+
+                return Utils.checkPassword(txtRegisterPassword.Text,txtRegisterRepeatPassword.Text);
             }
             return true;
         }

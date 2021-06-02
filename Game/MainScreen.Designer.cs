@@ -41,6 +41,9 @@
             this.lblProfileTitle = new System.Windows.Forms.Label();
             this.tlpStats = new System.Windows.Forms.TableLayoutPanel();
             this.pnlScoreboard = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.lblFilter = new System.Windows.Forms.Label();
+            this.tbValueScoreboard = new System.Windows.Forms.TextBox();
             this.pbSwitchSB = new System.Windows.Forms.PictureBox();
             this.tlpScoreboard = new System.Windows.Forms.TableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -77,6 +80,11 @@
             this.lblItem = new System.Windows.Forms.Label();
             this.pbSettings = new System.Windows.Forms.PictureBox();
             this.pnlSettings = new System.Windows.Forms.Panel();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.tbRepeatPassword = new System.Windows.Forms.TextBox();
+            this.tbPassword = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.tlpSettings = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
@@ -87,6 +95,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbReset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).BeginInit();
             this.pnlScoreboard.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSwitchSB)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbInventory)).BeginInit();
             this.pnlInventory.SuspendLayout();
@@ -102,6 +111,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).BeginInit();
             this.pnlSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // pbPlay
@@ -258,6 +268,9 @@
             this.pnlScoreboard.BackColor = System.Drawing.Color.Transparent;
             this.pnlScoreboard.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlScoreboard.BackgroundImage")));
             this.pnlScoreboard.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlScoreboard.Controls.Add(this.pictureBox1);
+            this.pnlScoreboard.Controls.Add(this.lblFilter);
+            this.pnlScoreboard.Controls.Add(this.tbValueScoreboard);
             this.pnlScoreboard.Controls.Add(this.pbSwitchSB);
             this.pnlScoreboard.Controls.Add(this.tlpScoreboard);
             this.pnlScoreboard.Controls.Add(this.label5);
@@ -271,13 +284,50 @@
             this.pnlScoreboard.Size = new System.Drawing.Size(493, 474);
             this.pnlScoreboard.TabIndex = 7;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox1.BackgroundImage")));
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Location = new System.Drawing.Point(275, 176);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(133, 36);
+            this.pictureBox1.TabIndex = 12;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pbLeaderBoardFilterSave_Click);
+            // 
+            // lblFilter
+            // 
+            this.lblFilter.AutoSize = true;
+            this.lblFilter.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblFilter.ForeColor = System.Drawing.Color.White;
+            this.lblFilter.Location = new System.Drawing.Point(71, 182);
+            this.lblFilter.Name = "lblFilter";
+            this.lblFilter.Size = new System.Drawing.Size(89, 20);
+            this.lblFilter.TabIndex = 11;
+            this.lblFilter.Text = "Show top:";
+            this.lblFilter.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // tbValueScoreboard
+            // 
+            this.tbValueScoreboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbValueScoreboard.Location = new System.Drawing.Point(161, 184);
+            this.tbValueScoreboard.Name = "tbValueScoreboard";
+            this.tbValueScoreboard.Size = new System.Drawing.Size(46, 22);
+            this.tbValueScoreboard.TabIndex = 10;
+            this.tbValueScoreboard.Text = "10";
+            this.tbValueScoreboard.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.tbValueScoreboard.Click += new System.EventHandler(this.tbValueScoreboard_Click);
+            this.tbValueScoreboard.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            // 
             // pbSwitchSB
             // 
             this.pbSwitchSB.BackColor = System.Drawing.Color.Transparent;
             this.pbSwitchSB.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbSwitchSB.BackgroundImage")));
             this.pbSwitchSB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbSwitchSB.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbSwitchSB.Location = new System.Drawing.Point(58, 130);
+            this.pbSwitchSB.Location = new System.Drawing.Point(58, 135);
             this.pbSwitchSB.Name = "pbSwitchSB";
             this.pbSwitchSB.Size = new System.Drawing.Size(165, 39);
             this.pbSwitchSB.TabIndex = 9;
@@ -293,11 +343,11 @@
             this.tlpScoreboard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
             this.tlpScoreboard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 65F));
             this.tlpScoreboard.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
-            this.tlpScoreboard.Location = new System.Drawing.Point(32, 215);
+            this.tlpScoreboard.Location = new System.Drawing.Point(32, 247);
             this.tlpScoreboard.Name = "tlpScoreboard";
             this.tlpScoreboard.RowCount = 1;
             this.tlpScoreboard.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 258F));
-            this.tlpScoreboard.Size = new System.Drawing.Size(431, 239);
+            this.tlpScoreboard.Size = new System.Drawing.Size(431, 207);
             this.tlpScoreboard.TabIndex = 8;
             // 
             // label5
@@ -305,7 +355,7 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(37, 187);
+            this.label5.Location = new System.Drawing.Point(37, 221);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(21, 24);
             this.label5.TabIndex = 6;
@@ -316,7 +366,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(369, 187);
+            this.label4.Location = new System.Drawing.Point(369, 221);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(88, 24);
             this.label4.TabIndex = 5;
@@ -327,7 +377,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(303, 187);
+            this.label3.Location = new System.Drawing.Point(303, 221);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(62, 24);
             this.label3.TabIndex = 4;
@@ -338,7 +388,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.White;
-            this.label2.Location = new System.Drawing.Point(232, 187);
+            this.label2.Location = new System.Drawing.Point(232, 221);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 24);
             this.label2.TabIndex = 3;
@@ -349,7 +399,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(92, 187);
+            this.label1.Location = new System.Drawing.Point(92, 221);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(105, 24);
             this.label1.TabIndex = 2;
@@ -360,7 +410,7 @@
             this.lblScoreboard.AutoSize = true;
             this.lblScoreboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblScoreboard.ForeColor = System.Drawing.Color.White;
-            this.lblScoreboard.Location = new System.Drawing.Point(230, 134);
+            this.lblScoreboard.Location = new System.Drawing.Point(230, 139);
             this.lblScoreboard.Name = "lblScoreboard";
             this.lblScoreboard.Size = new System.Drawing.Size(178, 31);
             this.lblScoreboard.TabIndex = 0;
@@ -707,12 +757,77 @@
             this.pnlSettings.BackColor = System.Drawing.Color.Transparent;
             this.pnlSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlSettings.BackgroundImage")));
             this.pnlSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlSettings.Controls.Add(this.pictureBox2);
+            this.pnlSettings.Controls.Add(this.tbRepeatPassword);
+            this.pnlSettings.Controls.Add(this.tbPassword);
+            this.pnlSettings.Controls.Add(this.label15);
+            this.pnlSettings.Controls.Add(this.label14);
             this.pnlSettings.Controls.Add(this.label13);
             this.pnlSettings.Controls.Add(this.tlpSettings);
             this.pnlSettings.Location = new System.Drawing.Point(258, 3);
             this.pnlSettings.Name = "pnlSettings";
             this.pnlSettings.Size = new System.Drawing.Size(493, 474);
             this.pnlSettings.TabIndex = 13;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox2.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.BackgroundImage")));
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox2.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.InitialImage")));
+            this.pictureBox2.Location = new System.Drawing.Point(202, 386);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(182, 48);
+            this.pictureBox2.TabIndex = 9;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.savePassword_Click);
+            // 
+            // tbRepeatPassword
+            // 
+            this.tbRepeatPassword.Location = new System.Drawing.Point(41, 420);
+            this.tbRepeatPassword.Name = "tbRepeatPassword";
+            this.tbRepeatPassword.PasswordChar = '*';
+            this.tbRepeatPassword.Size = new System.Drawing.Size(156, 20);
+            this.tbRepeatPassword.TabIndex = 8;
+            // 
+            // tbPassword
+            // 
+            this.tbPassword.Location = new System.Drawing.Point(41, 383);
+            this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '*';
+            this.tbPassword.Size = new System.Drawing.Size(156, 20);
+            this.tbPassword.TabIndex = 7;
+            // 
+            // label15
+            // 
+            this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label15.AutoSize = true;
+            this.label15.BackColor = System.Drawing.Color.Transparent;
+            this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.Color.White;
+            this.label15.Location = new System.Drawing.Point(32, 405);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(165, 16);
+            this.label15.TabIndex = 6;
+            this.label15.Text = "Repeat new password:";
+            // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label14.AutoSize = true;
+            this.label14.BackColor = System.Drawing.Color.Transparent;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.ForeColor = System.Drawing.Color.White;
+            this.label14.Location = new System.Drawing.Point(32, 364);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(113, 16);
+            this.label14.TabIndex = 5;
+            this.label14.Text = "New password:";
             // 
             // label13
             // 
@@ -736,12 +851,12 @@
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.86073F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.13927F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74F));
             this.tlpSettings.Location = new System.Drawing.Point(32, 182);
             this.tlpSettings.Name = "tlpSettings";
             this.tlpSettings.RowCount = 1;
             this.tlpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 257F));
-            this.tlpSettings.Size = new System.Drawing.Size(425, 257);
+            this.tlpSettings.Size = new System.Drawing.Size(425, 179);
             this.tlpSettings.TabIndex = 4;
             // 
             // MainScreen
@@ -760,11 +875,11 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pbInventory);
+            this.Controls.Add(this.pnlSettings);
+            this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
             this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
-            this.Controls.Add(this.pnlSettings);
-            this.Controls.Add(this.pnlProfile);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -786,6 +901,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();
             this.pnlScoreboard.ResumeLayout(false);
             this.pnlScoreboard.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSwitchSB)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbInventory)).EndInit();
             this.pnlInventory.ResumeLayout(false);
@@ -804,6 +920,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).EndInit();
             this.pnlSettings.ResumeLayout(false);
             this.pnlSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -861,5 +978,13 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TableLayoutPanel tlpSettings;
         private System.Windows.Forms.PictureBox pbSwitchSB;
+        private System.Windows.Forms.Label lblFilter;
+        private System.Windows.Forms.TextBox tbValueScoreboard;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.TextBox tbRepeatPassword;
+        private System.Windows.Forms.TextBox tbPassword;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label14;
     }
 }

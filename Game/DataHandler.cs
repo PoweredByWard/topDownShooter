@@ -110,6 +110,24 @@ namespace Game
             return false;
         }
 
+        public static bool changePassword(string password)
+        {
+            if (datastatus)
+            {
+                string hash = gethash(password);
+
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE EX2_Accounts SET password = @password, hash = @hash WHERE username = @username", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.Parameters.AddWithValue("@password", password);
+                cmd.Parameters.AddWithValue("@hash", hash);
+                cmd.ExecuteNonQuery();
+                connection.Close();
+                return true;
+            }
+            return false;
+        }
+
         public static void createUserDefaultSettings(string username)
         {
             DataTable controls = getControls();
@@ -200,13 +218,23 @@ namespace Game
             }
         }
 
-        public static DataTable getTop(int amount)
+        public static DataTable getTop(int amount, bool isPersonal)
         {
             data = new DataTable();
             if (datastatus)
             {
                 connection.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM EX2_Matches M, EX2_Accounts A  WHERE M.player = A.user_id ORDER BY M.zombie_kills DESC LIMIT @amount", connection);
+                MySqlCommand cmd;
+                if (isPersonal)
+                {
+                    cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM EX2_Matches M, EX2_Accounts A  WHERE M.player = A.user_id AND A.username = @username AND date(time) >= CURDATE() - interval @amount day ORDER BY M.zombie_kills DESC", connection);
+                    cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+
+                }
+                else
+                {
+                    cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM EX2_Matches M, EX2_Accounts A  WHERE M.player = A.user_id ORDER BY M.zombie_kills DESC LIMIT @amount", connection);
+                }
                 cmd.Parameters.AddWithValue("@amount", amount);
                 daGegevens = new MySqlDataAdapter(cmd);
                 daGegevens.Fill(data);

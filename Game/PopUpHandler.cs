@@ -16,11 +16,8 @@ namespace Game
 
         Panel popUpBack;
         Panel background;
-        PictureBox stars;
         Label title;
-        Label Description;
         Label button;
-        bool isEndScreen;
         public PopUpHandler(string titleText, string[] ButtonTexts, bool sort,Panel paste,List<Timer> playTimers, string Description = null)
         {
             if (sort)
@@ -118,6 +115,7 @@ namespace Game
                 timer.Start();
             }
         }
+
         protected void quitForm(object sender, EventArgs e)
         {
             System.Windows.Forms.Application.Exit();
