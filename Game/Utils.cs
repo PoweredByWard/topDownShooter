@@ -61,6 +61,8 @@ namespace Game
 
             if (collisions[0]&& collisions[2])collisions[2] = false;
             if (collisions[1] && collisions[3]) collisions[3] = false;
+            if (collisions[0]&& collisions[3])collisions[3] = false;
+            if (collisions[1] && collisions[2]) collisions[2] = false;
 
 
             return collisions;
@@ -94,8 +96,9 @@ namespace Game
             }
             try
             {
-                int.Parse(text);
-                if (!text.Contains("-") && !text.Contains(".") && !text.Contains(","))
+                int number = int.Parse(text);
+                text = number.ToString();
+                if (number>=0)
                 {
                     oldPrice = text;
                 }

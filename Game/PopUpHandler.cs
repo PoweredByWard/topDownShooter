@@ -100,6 +100,10 @@ namespace Game
                     Application.OpenForms[i].BringToFront();
                     opened = true;
                 }
+                if (Application.OpenForms[i].Name == "GameForm")
+                {
+                    Application.OpenForms[i].Dispose();
+                }
             }
             if (!opened)
             {

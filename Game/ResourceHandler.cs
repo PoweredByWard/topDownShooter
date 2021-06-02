@@ -6,6 +6,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,6 +25,9 @@ namespace Game
                 try
                 {
                     img.Save($"{Environment.CurrentDirectory}\\{tbl.Rows[i][2].ToString().Replace("/", "\\")}");
+                }catch(ExternalException ee)
+                {
+                    Console.WriteLine("File was still open");
                 }
                 catch (Exception e)
                 {

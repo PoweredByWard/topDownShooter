@@ -128,6 +128,35 @@ namespace Game
             return false;
         }
 
+        public static bool isFirstTime()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT *  FROM EX2_Accounts WHERE username = @username AND first_time = 1", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                daGegevens = new MySqlDataAdapter(cmd);
+                daGegevens.Fill(data);
+                connection.Close();
+                if (data.Rows.Count > 0) return true;
+            }
+            return false;
+        }
+
+        public static void didFirstTime()
+        {
+            data = new DataTable();
+            if (datastatus)
+            {
+                connection.Open();
+                MySqlCommand cmd = new MySqlCommand("UPDATE EX2_Accounts SET first_time = 0 WHERE username = @username", connection);
+                cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
+                cmd.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
         public static void createUserDefaultSettings(string username)
         {
             DataTable controls = getControls();
@@ -227,7 +256,7 @@ namespace Game
                 MySqlCommand cmd;
                 if (isPersonal)
                 {
-                    cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM EX2_Matches M, EX2_Accounts A  WHERE M.player = A.user_id AND A.username = @username AND date(time) >= CURDATE() - interval @amount day ORDER BY M.zombie_kills DESC", connection);
+                    cmd = new MySqlCommand("SELECT A.username,M.zombie_kills,M.wave,M.duration  FROM EX2_Matches M, EX2_Accounts A  WHERE M.player = A.user_id AND A.username = @username AND date(time) >= CURDATE() - interval @amount day ORDER BY M.time DESC", connection);
                     cmd.Parameters.AddWithValue("@username", AccountHandler.getUsername());
 
                 }

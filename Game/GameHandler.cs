@@ -252,7 +252,7 @@ namespace Game
                 }
                 else if (key == gameControls[4])
                 {
-                    SoundHandler.togleMute();
+                    SoundHandler.muted = !SoundHandler.muted;
                 }
                 else if (key == (int)Keys.Escape)
                 {
@@ -706,13 +706,8 @@ namespace Game
         public void draw(Graphics gData)
         {
             g = gData;
-            if (timedif!=0)
-            {
-                Console.WriteLine((DateTime.Now - gamestart));
-                g.DrawString($"{(int)(1000  / timedif)} FPS\n\rTime past: {Math.Floor((DateTime.Now - gameStart).TotalMinutes)}{(DateTime.Now - gameStart).Seconds} \n\rKills: {kills}\n\rCoins earned: {Utils.calculateScore(kills, (DateTime.Now - gamestart).TotalMinutes)}", new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold), Brushes.White, 5, 5);
-            }
 
-            g.DrawString(uiHandler.getCoins().ToString(), new Font(FontFamily.GenericSansSerif, 24, FontStyle.Bold), Brushes.White, pnlMain.Width-150, 21);
+            //start entities
             for (int i = 0; i < turrets.Count; i++)
             {
                 Bitmap turretSkin = (Bitmap)turrets[i].getSkin();
@@ -736,7 +731,9 @@ namespace Game
                 bulletSkin = Utils.rotateImg(bulletSkin, bullet.getAngle());
                 g.DrawImage(bulletSkin, bullet.getLocation());
             }
+            //einde entities
 
+            //start player
             Bitmap weaponSkin = (Bitmap)inventory.getActiveWeapon();
             inventory.setAngle(player.getAngle());
             inventory.setLocation(player.getPosition());
@@ -749,8 +746,9 @@ namespace Game
             Bitmap healthBar = Utils.createHealthBar(player.getMaxHealt(), player.getHealt(), 100, 10);
             g.DrawImage(healthBar, (player.getCenterPosition().X+ playerSkin.Width/2)- healthBar.Width/2, player.getPosition().Y-30);
             g.DrawImage(playerSkin, player.getCenterPosition());
+            //einde player
 
-
+            //start popup
             if (lastWave >= DateTime.Now.AddSeconds(-3))
             {
                 StringFormat sf = new StringFormat();
@@ -758,7 +756,20 @@ namespace Game
                 sf.Alignment = StringAlignment.Center;
                 g.DrawString($"Wave {waveHndlr.getWave()} incomming!", new Font(FontFamily.GenericSansSerif, 50, FontStyle.Bold), Brushes.White,450,400);
             }
+            //einde popup
+
+            //start stats
+            if (timedif != 0)
+            {
+                Console.WriteLine((DateTime.Now - gamestart));
+                g.DrawString($"{AccountHandler.getUsername()}\t {Math.Floor((DateTime.Now - gameStart).TotalMinutes)}:{(DateTime.Now - gameStart).Seconds}\t|\t{DateTime.Now}\n\r{(int)(1000 / timedif)} FPS\n\rKills: {kills}\n\rCoins earned: {Utils.calculateScore(kills, (DateTime.Now - gamestart).TotalMinutes)}", new Font(FontFamily.GenericSansSerif, 20, FontStyle.Bold), Brushes.White, 5, 5);
+            }
+            //einde stats
+
+            //start UI
+            g.DrawString(uiHandler.getCoins().ToString(), new Font(FontFamily.GenericSansSerif, 24, FontStyle.Bold), Brushes.White, pnlMain.Width - 150, 21);
             g.DrawImage(UI, new Point(0,0));
+            //start stats
         }
         //einde draw-move
 

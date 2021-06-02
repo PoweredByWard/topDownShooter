@@ -86,13 +86,14 @@ namespace Game
 
             lblProfileTitle.Text = account != AccountHandler.getUsername() ? $"{account}'s Profile" : "Your profile";
 
-            if (!DataHandler.isAdmin(account)) pbDelete.Visible = DataHandler.isAdmin(AccountHandler.getUsername());
+            if (DataHandler.isAdmin(account)) pbDelete.Hide();
+            else pbDelete.Show();
 
             tlpSearch.Visible = false;
             if (DataHandler.isAdmin(AccountHandler.getUsername()))
             {
-                txtSearch.Visible = true;
-                pbReset.Visible = true;
+                txtSearch.Show();
+                pbReset.Show();
             }
 
             const int ROW_HEIGHT = 30;
@@ -259,13 +260,13 @@ namespace Game
                 valueLeaderboard = "7";
                 lblFilter.Text = "Range in days:";
 
-                pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showPersonal.png");
+                pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showGlobal.png");
             }
             else
             {
                 valueLeaderboard = "10";
                 lblFilter.Text = "Show top:";
-                pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showGlobal.png");
+                pbSwitchSB.BackgroundImage = Image.FromFile("GUI/showPersonal.png");
             }
             tbValueScoreboard.Text = valueLeaderboard;
             tbValueScoreboard.Location = new Point(lblFilter.Location.X + lblFilter.Width + 5, tbValueScoreboard.Location.Y);
@@ -447,7 +448,6 @@ namespace Game
 
             if (previewType == null)
             {
-                
                 pbDeleteItem.Show();
                 DataTable itemtbl = DataHandler.getItem(previewItem);
 

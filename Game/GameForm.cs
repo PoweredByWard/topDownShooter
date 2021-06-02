@@ -24,7 +24,19 @@ namespace Game
         private void Init()
         {
             typeof(Panel).InvokeMember("DoubleBuffered", BindingFlags.SetProperty | BindingFlags.Instance | BindingFlags.NonPublic, null, pnlMain, new object[] { true });
-            game = new GameHandler(pnlMain,drawTimer,this);
+            if (DataHandler.isFirstTime())
+            {
+                DialogResult dialogResult = MessageBox.Show($"You are a soldier left behind. Survive as long as possible, but be aware of the zombies!\n\r\n\rZombie shooter is a top-down shooter with zombie waves attacking you. Protect yourself by placing turrets, but be aware. I have heard some stories that there are super strong but slow zombie masters...\n\r\n\rGet as many kills as possible to get on the top of the leaderboards!\n\rGood luck {AccountHandler.getUsername()}", "How to play?", MessageBoxButtons.OK);
+                if (dialogResult == DialogResult.OK)
+                {
+                    game = new GameHandler(pnlMain, drawTimer, this);
+                    DataHandler.didFirstTime();
+                };
+            }
+            else
+            {
+                game = new GameHandler(pnlMain, drawTimer, this);
+            }
             Bitmap cursor = new Bitmap("GUI/crosshair.png");
             this.Cursor = new Cursor(cursor.GetHicon());
             drawTimer.Start();

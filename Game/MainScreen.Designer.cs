@@ -875,11 +875,11 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pbInventory);
-            this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
             this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
+            this.Controls.Add(this.pnlSettings);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
