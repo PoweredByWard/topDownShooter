@@ -34,6 +34,7 @@
             this.pbScoreboard = new System.Windows.Forms.PictureBox();
             this.pbExit = new System.Windows.Forms.PictureBox();
             this.pnlProfile = new System.Windows.Forms.Panel();
+            this.pbAdminRole = new System.Windows.Forms.PictureBox();
             this.pbReset = new System.Windows.Forms.PictureBox();
             this.pbDelete = new System.Windows.Forms.PictureBox();
             this.tlpSearch = new System.Windows.Forms.TableLayoutPanel();
@@ -80,6 +81,7 @@
             this.lblItem = new System.Windows.Forms.Label();
             this.pbSettings = new System.Windows.Forms.PictureBox();
             this.pnlSettings = new System.Windows.Forms.Panel();
+            this.pbResetSettings = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.tbRepeatPassword = new System.Windows.Forms.TextBox();
             this.tbPassword = new System.Windows.Forms.TextBox();
@@ -87,11 +89,13 @@
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.tlpSettings = new System.Windows.Forms.TableLayoutPanel();
+            this.pbInfo = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbScoreboard)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbExit)).BeginInit();
             this.pnlProfile.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAdminRole)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbReset)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).BeginInit();
             this.pnlScoreboard.SuspendLayout();
@@ -111,7 +115,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbItemPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).BeginInit();
             this.pnlSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbResetSettings)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInfo)).BeginInit();
             this.SuspendLayout();
             // 
             // pbPlay
@@ -171,6 +177,7 @@
             this.pnlProfile.BackColor = System.Drawing.Color.Transparent;
             this.pnlProfile.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlProfile.BackgroundImage")));
             this.pnlProfile.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlProfile.Controls.Add(this.pbAdminRole);
             this.pnlProfile.Controls.Add(this.pbReset);
             this.pnlProfile.Controls.Add(this.pbDelete);
             this.pnlProfile.Controls.Add(this.tlpSearch);
@@ -181,6 +188,20 @@
             this.pnlProfile.Name = "pnlProfile";
             this.pnlProfile.Size = new System.Drawing.Size(493, 474);
             this.pnlProfile.TabIndex = 6;
+            // 
+            // pbAdminRole
+            // 
+            this.pbAdminRole.BackColor = System.Drawing.Color.Transparent;
+            this.pbAdminRole.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbAdminRole.BackgroundImage")));
+            this.pbAdminRole.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbAdminRole.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbAdminRole.Location = new System.Drawing.Point(275, 342);
+            this.pbAdminRole.Name = "pbAdminRole";
+            this.pbAdminRole.Size = new System.Drawing.Size(182, 48);
+            this.pbAdminRole.TabIndex = 9;
+            this.pbAdminRole.TabStop = false;
+            this.pbAdminRole.Visible = false;
+            this.pbAdminRole.Click += new System.EventHandler(this.pbAdminRole_Click);
             // 
             // pbReset
             // 
@@ -233,7 +254,8 @@
             this.txtSearch.Size = new System.Drawing.Size(127, 20);
             this.txtSearch.TabIndex = 5;
             this.txtSearch.Visible = false;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtSearch.Click += new System.EventHandler(this.txtSearch_Search);
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_Search);
             // 
             // lblProfileTitle
             // 
@@ -260,7 +282,7 @@
             this.tlpStats.Name = "tlpStats";
             this.tlpStats.RowCount = 1;
             this.tlpStats.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 218F));
-            this.tlpStats.Size = new System.Drawing.Size(416, 218);
+            this.tlpStats.Size = new System.Drawing.Size(416, 146);
             this.tlpStats.TabIndex = 4;
             // 
             // pnlScoreboard
@@ -451,7 +473,7 @@
             this.pbGunAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbGunAdd.BackgroundImage")));
             this.pbGunAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbGunAdd.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbGunAdd.Location = new System.Drawing.Point(301, 285);
+            this.pbGunAdd.Location = new System.Drawing.Point(301, 298);
             this.pbGunAdd.Name = "pbGunAdd";
             this.pbGunAdd.Size = new System.Drawing.Size(112, 30);
             this.pbGunAdd.TabIndex = 6;
@@ -463,7 +485,7 @@
             this.pbPlayerAdd.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbPlayerAdd.BackgroundImage")));
             this.pbPlayerAdd.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pbPlayerAdd.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 130);
+            this.pbPlayerAdd.Location = new System.Drawing.Point(301, 131);
             this.pbPlayerAdd.Name = "pbPlayerAdd";
             this.pbPlayerAdd.Size = new System.Drawing.Size(112, 30);
             this.pbPlayerAdd.TabIndex = 5;
@@ -479,7 +501,7 @@
             this.label8.BackColor = System.Drawing.Color.Transparent;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label8.ForeColor = System.Drawing.Color.White;
-            this.label8.Location = new System.Drawing.Point(198, 289);
+            this.label8.Location = new System.Drawing.Point(198, 302);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(92, 24);
             this.label8.TabIndex = 4;
@@ -494,7 +516,7 @@
             this.label7.BackColor = System.Drawing.Color.Transparent;
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label7.ForeColor = System.Drawing.Color.White;
-            this.label7.Location = new System.Drawing.Point(188, 134);
+            this.label7.Location = new System.Drawing.Point(188, 135);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(111, 24);
             this.label7.TabIndex = 3;
@@ -504,22 +526,22 @@
             // 
             this.tlpGun.ColumnCount = 1;
             this.tlpGun.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpGun.Location = new System.Drawing.Point(41, 316);
+            this.tlpGun.Location = new System.Drawing.Point(41, 329);
             this.tlpGun.Name = "tlpGun";
             this.tlpGun.RowCount = 1;
             this.tlpGun.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpGun.Size = new System.Drawing.Size(416, 123);
+            this.tlpGun.Size = new System.Drawing.Size(416, 135);
             this.tlpGun.TabIndex = 1;
             // 
             // tlpPlayer
             // 
             this.tlpPlayer.ColumnCount = 1;
             this.tlpPlayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPlayer.Location = new System.Drawing.Point(41, 161);
+            this.tlpPlayer.Location = new System.Drawing.Point(41, 162);
             this.tlpPlayer.Name = "tlpPlayer";
             this.tlpPlayer.RowCount = 1;
             this.tlpPlayer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tlpPlayer.Size = new System.Drawing.Size(416, 123);
+            this.tlpPlayer.Size = new System.Drawing.Size(416, 135);
             this.tlpPlayer.TabIndex = 0;
             // 
             // pbCoin
@@ -757,6 +779,7 @@
             this.pnlSettings.BackColor = System.Drawing.Color.Transparent;
             this.pnlSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pnlSettings.BackgroundImage")));
             this.pnlSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pnlSettings.Controls.Add(this.pbResetSettings);
             this.pnlSettings.Controls.Add(this.pictureBox2);
             this.pnlSettings.Controls.Add(this.tbRepeatPassword);
             this.pnlSettings.Controls.Add(this.tbPassword);
@@ -769,6 +792,20 @@
             this.pnlSettings.Size = new System.Drawing.Size(493, 474);
             this.pnlSettings.TabIndex = 13;
             // 
+            // pbResetSettings
+            // 
+            this.pbResetSettings.BackColor = System.Drawing.Color.Transparent;
+            this.pbResetSettings.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbResetSettings.BackgroundImage")));
+            this.pbResetSettings.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbResetSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbResetSettings.InitialImage = ((System.Drawing.Image)(resources.GetObject("pbResetSettings.InitialImage")));
+            this.pbResetSettings.Location = new System.Drawing.Point(325, 405);
+            this.pbResetSettings.Name = "pbResetSettings";
+            this.pbResetSettings.Size = new System.Drawing.Size(124, 34);
+            this.pbResetSettings.TabIndex = 10;
+            this.pbResetSettings.TabStop = false;
+            this.pbResetSettings.Click += new System.EventHandler(this.pbResetSettings_Click);
+            // 
             // pictureBox2
             // 
             this.pictureBox2.BackColor = System.Drawing.Color.Transparent;
@@ -776,16 +813,16 @@
             this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.pictureBox2.Cursor = System.Windows.Forms.Cursors.Hand;
             this.pictureBox2.InitialImage = ((System.Drawing.Image)(resources.GetObject("pictureBox2.InitialImage")));
-            this.pictureBox2.Location = new System.Drawing.Point(202, 386);
+            this.pictureBox2.Location = new System.Drawing.Point(195, 405);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(182, 48);
+            this.pictureBox2.Size = new System.Drawing.Size(124, 34);
             this.pictureBox2.TabIndex = 9;
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.savePassword_Click);
             // 
             // tbRepeatPassword
             // 
-            this.tbRepeatPassword.Location = new System.Drawing.Point(41, 420);
+            this.tbRepeatPassword.Location = new System.Drawing.Point(33, 420);
             this.tbRepeatPassword.Name = "tbRepeatPassword";
             this.tbRepeatPassword.PasswordChar = '*';
             this.tbRepeatPassword.Size = new System.Drawing.Size(156, 20);
@@ -793,7 +830,7 @@
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(41, 383);
+            this.tbPassword.Location = new System.Drawing.Point(33, 383);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(156, 20);
@@ -808,7 +845,7 @@
             this.label15.BackColor = System.Drawing.Color.Transparent;
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label15.ForeColor = System.Drawing.Color.White;
-            this.label15.Location = new System.Drawing.Point(32, 405);
+            this.label15.Location = new System.Drawing.Point(30, 405);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(165, 16);
             this.label15.TabIndex = 6;
@@ -823,7 +860,7 @@
             this.label14.BackColor = System.Drawing.Color.Transparent;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label14.ForeColor = System.Drawing.Color.White;
-            this.label14.Location = new System.Drawing.Point(32, 364);
+            this.label14.Location = new System.Drawing.Point(30, 364);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(113, 16);
             this.label14.TabIndex = 5;
@@ -847,17 +884,29 @@
             // tlpSettings
             // 
             this.tlpSettings.BackColor = System.Drawing.Color.Transparent;
-            this.tlpSettings.ColumnCount = 4;
+            this.tlpSettings.ColumnCount = 3;
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.86073F));
             this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.13927F));
-            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 74F));
+            this.tlpSettings.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
             this.tlpSettings.Location = new System.Drawing.Point(32, 182);
             this.tlpSettings.Name = "tlpSettings";
             this.tlpSettings.RowCount = 1;
             this.tlpSettings.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 257F));
             this.tlpSettings.Size = new System.Drawing.Size(425, 179);
             this.tlpSettings.TabIndex = 4;
+            // 
+            // pbInfo
+            // 
+            this.pbInfo.BackColor = System.Drawing.Color.Transparent;
+            this.pbInfo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("pbInfo.BackgroundImage")));
+            this.pbInfo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pbInfo.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbInfo.Location = new System.Drawing.Point(184, 45);
+            this.pbInfo.Name = "pbInfo";
+            this.pbInfo.Size = new System.Drawing.Size(25, 25);
+            this.pbInfo.TabIndex = 14;
+            this.pbInfo.TabStop = false;
+            this.pbInfo.Click += new System.EventHandler(this.pbInfo_Click);
             // 
             // MainScreen
             // 
@@ -867,6 +916,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(800, 500);
+            this.Controls.Add(this.pbInfo);
             this.Controls.Add(this.pbSettings);
             this.Controls.Add(this.pbCoin);
             this.Controls.Add(this.lblCoin);
@@ -875,11 +925,11 @@
             this.Controls.Add(this.pbProfile);
             this.Controls.Add(this.pbPlay);
             this.Controls.Add(this.pbInventory);
+            this.Controls.Add(this.pnlSettings);
             this.Controls.Add(this.pnlProfile);
             this.Controls.Add(this.pnlScoreboard);
             this.Controls.Add(this.pnlItem);
             this.Controls.Add(this.pnlInventory);
-            this.Controls.Add(this.pnlSettings);
             this.Cursor = System.Windows.Forms.Cursors.Default;
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -888,8 +938,6 @@
             this.Text = "MainScreen";
             this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(13)))), ((int)(((byte)(132)))), ((int)(((byte)(73)))));
             this.Activated += new System.EventHandler(this.activated);
-            this.Deactivate += new System.EventHandler(this.deactivated);
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainScreen_KeyDown);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainScreen_MouseDown);
             ((System.ComponentModel.ISupportInitialize)(this.pbPlay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbProfile)).EndInit();
@@ -897,6 +945,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbExit)).EndInit();
             this.pnlProfile.ResumeLayout(false);
             this.pnlProfile.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbAdminRole)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbReset)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDelete)).EndInit();
             this.pnlScoreboard.ResumeLayout(false);
@@ -920,7 +969,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbSettings)).EndInit();
             this.pnlSettings.ResumeLayout(false);
             this.pnlSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbResetSettings)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbInfo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -986,5 +1037,8 @@
         private System.Windows.Forms.TextBox tbPassword;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.PictureBox pbAdminRole;
+        private System.Windows.Forms.PictureBox pbInfo;
+        private System.Windows.Forms.PictureBox pbResetSettings;
     }
 }

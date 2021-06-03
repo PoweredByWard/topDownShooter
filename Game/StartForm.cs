@@ -63,6 +63,7 @@ namespace Game
             else
             {
                 username = txtRegisterUsername.Text;
+                password = txtRegisterPassword.Text;
 
                 if (password.Length <= 3)
                 {
@@ -82,26 +83,23 @@ namespace Game
 
         private void pbLogin_Click(object sender, EventArgs e)
         {
-            AccountHandler.setUsername("ward");
-            MainScreen mainScreen = new MainScreen();
-            mainScreen.Show();
-            this.Hide();
 
-            //bool valid = checkInputs("Login");
-            //if (valid)
-            //{
-            //    if (data.loginUser(username, password))
-            //    {
-            //AccountHandler account = new AccountHandler(username);
-            // MainScreen mainScreen = new MainScreen(account);
-            //mainScreen.Show();
-            //this.Hide();
-            //}
-            //else
-            //{
-            // MessageBox.Show("wrong credentials, Invalid username or password!");
-            //}
-            //}
+            bool valid = checkInputs("Login");
+            if (valid)
+            {
+                if (DataHandler.loginUser(username, password))
+                {
+                    AccountHandler.setUsername(username);
+                    ResourceHandler.checkResources();
+                    MainScreen mainScreen = new MainScreen();
+                    mainScreen.Show();
+                    this.Hide();
+                }
+                else
+                {
+                    MessageBox.Show("wrong credentials, Invalid username or password!");
+                }
+            }
         }
 
         private void pbRegister_Click(object sender, EventArgs e)
@@ -109,10 +107,10 @@ namespace Game
             bool valid = checkInputs("Register");
             if (valid)
             {
+                AccountHandler.setUsername(username);
                 if (DataHandler.createUser(username, password))
                 {
-                    AccountHandler.setUsername(username);
-                    Console.WriteLine(AccountHandler.getUsername());
+                    ResourceHandler.checkResources();
                     MainScreen mainScreen = new MainScreen();
                     mainScreen.Show();
                     this.Hide();

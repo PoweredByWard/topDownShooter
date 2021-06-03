@@ -21,6 +21,9 @@ namespace Game
         string needKey = "";
         string valueLeaderboard;
         bool personalSB;
+
+        Image imgMakeAdmin = Image.FromFile("GUI/makeadmin.png");
+        Image imgRemoveAdmin = Image.FromFile("GUI/removeadmin.png");
         public MainScreen()
         {
             InitializeComponent();
@@ -33,14 +36,7 @@ namespace Game
 
         //start van updates
         private void activated(object sender, EventArgs e) => refreshCoins();
-
-        private void deactivated(object sender, EventArgs e)
-        {
-            if (needKey != "")
-            {
-                showSettings();
-            }
-        }
+        private void pbInfo_Click(object sender, EventArgs e) => Utils.showInfoMessage();
 
         public void refreshCoins()
         {
@@ -74,10 +70,26 @@ namespace Game
         //einde van play
 
         //start van profielen
-        private void txtSearch_TextChanged(object sender, EventArgs e) => showResultsSearch(((TextBox)sender).Text);
+        private void txtSearch_Search(object sender, EventArgs e) => showResultsSearch(((TextBox)sender).Text);
         private void searchClick(object sender, EventArgs e) => showProfile(((Label)sender).Text);
         private void pbProfile_Click(object sender, EventArgs e) => showProfile();
         private void MainScreen_MouseDown(object sender, MouseEventArgs e) => tlpSearch.Visible = false;
+        private void checkRoleBtn() => pbAdminRole.BackgroundImage = DataHandler.isAdmin(account) ? imgRemoveAdmin : imgMakeAdmin;
+
+        private void pbAdminRole_Click(object sender, EventArgs e)
+        {
+            bool valid;
+            if (DataHandler.isAdmin(account))
+            {
+                valid = DataHandler.removeAdmin(account);
+            }
+            else
+            {
+                valid = DataHandler.addAdmin(account);
+            }
+            if (!valid) MessageBox.Show("Something went wrong");
+            checkRoleBtn();
+        }
 
         private void showProfile(string username = null)
         {
@@ -90,10 +102,16 @@ namespace Game
             else pbDelete.Show();
 
             tlpSearch.Visible = false;
+            pbAdminRole.Hide();
             if (DataHandler.isAdmin(AccountHandler.getUsername()))
             {
                 txtSearch.Show();
                 pbReset.Show();
+                if (account != AccountHandler.getUsername())
+                {
+                    pbAdminRole.Show();
+                    checkRoleBtn();
+                }
             }
 
             const int ROW_HEIGHT = 30;
@@ -227,6 +245,9 @@ namespace Game
             valueLeaderboard = personalSB ? "7" : "10";
             this.ActiveControl = Utils.showPnl("pnlScoreboard",tabs);
             loadLeaderboard(int.Parse(valueLeaderboard));
+            tlpScoreboard.AutoScroll = false;
+            tlpScoreboard.HorizontalScroll.Enabled = false;
+            tlpScoreboard.AutoScroll = true;
         }
 
         private void loadLeaderboard(int value)
@@ -317,60 +338,40 @@ namespace Game
             ContentAlignment align = ContentAlignment.BottomCenter;
             AnchorStyles anchor = (AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom);
 
-            for (int t = 0; t < types.Rows.Count; t++)
+            TableLayoutPanel[] typesInventory = new TableLayoutPanel[] { tlpGun, tlpPlayer };
+
+            for (int i = 0; i < typesInventory.Length; i++)
             {
-                DataTable items = DataHandler.getItems(types.Rows[t][0].ToString());
-                if (types.Rows[t][1].ToString()=="Gun")
+                DataTable items = DataHandler.getItems(types.Rows[i][0].ToString());
+                typesInventory[i].RowCount++;
+                typesInventory[i].RowStyles.Add(new RowStyle(SizeType.Absolute, typesInventory[i].Height - 60));
+                if (items.Rows.Count>3)
                 {
-                    tlpGun.RowCount++;
-                    tlpGun.RowStyles.Add(new RowStyle(SizeType.Absolute, tlpGun.Height - 40));
-
-                    for (int i = 0; i < items.Rows.Count; i++)
-                    {
-                        tlpGun.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));
-                        tlpGun.ColumnCount++;
-                        bool owned = playerItems.Contains(items.Rows[i][0].ToString());
-                        bool equipped = owned ? (bool.Parse(playerItemsData.Rows[playerItems.IndexOf(items.Rows[i][0].ToString())][3].ToString())) : false;
-                        Image button = owned ? (equipped ? Image.FromFile("GUI/save.png") : Image.FromFile("GUI/save.png")) : Image.FromFile("GUI/scoreboard.png");
-
-                        string text = items.Rows[i][4].ToString() == "0" ? "Free" : $"{items.Rows[i][4].ToString()} coins";
-                        Label lblButton = new Label { Name = $"lbl{items.Rows[i][0]}", Text = owned ? (equipped ? "Equipped" : "Equip") : text, Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
-
-                        lblButton.Click += new EventHandler(itemClick);
-                        tlpGun.Controls.Add(createInventoryItem(items.Rows[i]), i, 0);
-                        tlpGun.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
-
-                        PictureBox btn = new PictureBox { Name = $"btn{items.Rows[i][0]}", BackgroundImage = button, BackgroundImageLayout = ImageLayout.Stretch, Height = 35, Controls = { lblButton }, Cursor = Cursors.Hand };
-                        btn.Click += new EventHandler(itemClick);
-                        tlpGun.Controls.Add(btn, i, 1);
-                    }
-                }
-                else if (types.Rows[t][1].ToString() == "Player")
-                {
-                    tlpPlayer.RowCount++;
-                    tlpPlayer.RowStyles.Add(new RowStyle(SizeType.Absolute, tlpPlayer.Height - 40));
-
-                    for (int i = 0; i < items.Rows.Count; i++)
-                    {
-                        tlpPlayer.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));
-                        tlpPlayer.ColumnCount++;
-                        bool owned = playerItems.Contains(items.Rows[i][0].ToString());
-                        bool equipped = owned ? (bool.Parse(playerItemsData.Rows[playerItems.IndexOf(items.Rows[i][0].ToString())][3].ToString())) : false;
-                        Image button = owned ? (equipped ? Image.FromFile("GUI/save.png"): Image.FromFile("GUI/save.png")) : Image.FromFile("GUI/scoreboard.png");
-
-                        string text = items.Rows[i][4].ToString() == "0" ? "Free" : $"{items.Rows[i][4].ToString()} coins";
-                        Label lblButton = new Label { Name = $"lbl{items.Rows[i][0]}", Text = owned ? (equipped? "Equipped" : "Equip") : text, Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
-                        
-                        lblButton.Click += new EventHandler(itemClick);
-                        tlpPlayer.Controls.Add(createInventoryItem(items.Rows[i]), i, 0);
-                        tlpPlayer.RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
-
-                        PictureBox btn = new PictureBox { Name = $"btn{items.Rows[i][0]}" , BackgroundImage = button, BackgroundImageLayout = ImageLayout.Stretch, Height = 35, Controls = { lblButton }, Cursor = Cursors.Hand };
-                        btn.Click += new EventHandler(itemClick);
-                        tlpPlayer.Controls.Add(btn, i, 1);
-                    }
+                    typesInventory[i].AutoScroll = false;
+                    typesInventory[i].VerticalScroll.Enabled = false;
+                    typesInventory[i].VerticalScroll.Visible = false;
+                    typesInventory[i].AutoScroll = true;
                 }
 
+                for (int r = 0; r < items.Rows.Count; r++)
+                {
+                    typesInventory[i].ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 130));
+                    typesInventory[i].ColumnCount++;
+                    bool owned = playerItems.Contains(items.Rows[r][0].ToString());
+                    bool equipped = owned ? (bool.Parse(playerItemsData.Rows[playerItems.IndexOf(items.Rows[r][0].ToString())][3].ToString())) : false;
+                    Image button = owned ? (equipped ? Image.FromFile("GUI/save.png") : Image.FromFile("GUI/save.png")) : Image.FromFile("GUI/scoreboard.png");
+
+                    string text = items.Rows[r][4].ToString() == "0" ? "Free" : $"{items.Rows[r][4].ToString()} coins";
+                    Label lblButton = new Label { Name = $"lbl{items.Rows[r][0]}", Text = owned ? (equipped ? "Equipped" : "Equip") : text, Anchor = anchor, Font = lblFont, TextAlign = align, ForeColor = Color.White };
+
+                    lblButton.Click += new EventHandler(itemClick);
+                    typesInventory[i].Controls.Add(createInventoryItem(items.Rows[r]), r, 0);
+                    typesInventory[i].RowStyles.Add(new RowStyle(SizeType.Absolute, 40));
+
+                    PictureBox btn = new PictureBox { Name = $"btn{items.Rows[r][0]}", BackgroundImage = button, BackgroundImageLayout = ImageLayout.Stretch, Height = 35, Controls = { lblButton }, Cursor = Cursors.Hand };
+                    btn.Click += new EventHandler(itemClick);
+                    typesInventory[i].Controls.Add(btn, r, 1);
+                }
             }
         }
 
@@ -420,7 +421,7 @@ namespace Game
         private Panel createInventoryItem(DataRow item)
         {
             Panel inventoryItem = new Panel();
-            inventoryItem.Size = new Size(100,120);
+            inventoryItem.Size = new Size(100,80);
             string[] rgb = item[5].ToString().Split(',');
 
             inventoryItem.BackColor = Color.FromArgb(int.Parse(rgb[0]), int.Parse(rgb[1]), int.Parse(rgb[2]));
@@ -575,7 +576,7 @@ namespace Game
             if (deleted)
             {
                 MessageBox.Show($"Item got deleted.");
-                showProfile();
+                showInventory();
             }
             else MessageBox.Show($"Couldn't delete this Item.");
         }
@@ -583,6 +584,11 @@ namespace Game
 
         //start van settings
         private void pbSettings_Click(object sender, EventArgs e) => showSettings();
+        private void pbResetSettings_Click(object sender, EventArgs e)
+        {
+            DataHandler.createUserDefaultSettings(AccountHandler.getUsername());
+            showSettings();
+        }
         private void showSettings()
         {
             this.ActiveControl = Utils.showPnl("pnlSettings", tabs);
@@ -620,20 +626,23 @@ namespace Game
             lbl.Font = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Bold);
             lbl.Text = "(Press A button)";
             needKey = lbl.Name;
+            this.Focus();
         }
-        private void MainScreen_KeyDown(object sender, KeyEventArgs e)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            Console.WriteLine(keyData);
             Label lbl = tlpSettings.Controls.OfType<Label>().First(label => label.Name == needKey);
             if (needKey != "")
             {
-                Console.WriteLine((int)e.KeyCode);
-                if (e.KeyCode != Keys.Escape)
+                if (keyData != Keys.Escape)
                 {
-                    DataHandler.setUserControl(needKey, ((int)e.KeyCode).ToString());
+                    DataHandler.setUserControl(needKey, ((int)keyData).ToString());
                 }
                 lbl.Text = Enum.Parse(typeof(Keys), DataHandler.getUserControl(needKey).Rows[0][0].ToString()).ToString();
                 lbl.Font = new Font(FontFamily.GenericSansSerif, 14, FontStyle.Regular);
+                needKey = "";
             }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         private void savePassword_Click(object sender, EventArgs e)
@@ -650,6 +659,12 @@ namespace Game
 
         //start van exit
         private void pbExit_Click(object sender, EventArgs e) => Utils.quit();
+
+        private void MainScreen_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
+
 
         //einde van exit
     }
